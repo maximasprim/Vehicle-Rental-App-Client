@@ -6,16 +6,20 @@ import Container from "../Components/Container"
 // import Benefits from "../Components/Benefits"
 // import { benefitOne, benefitTwo } from "../utils/data"
 import Footer from "../Components/Footer"
-import Register from "../Components/register"
 import Featured from "../Components/Featured"
 import UsersList from "../features/Users/usersList"
+import RegisterUser from "../features/Register/register"
+import { ToastContainer } from "react-toastify"
+
+
 const Home = () => {
   return (
     <div>
       <Container className="bg-base-200 flex flex-col gap-6">
         <Navbar />
         <Hero />
-        <Register />
+        <ToastContainer />
+        <RegisterUser />
         <Companies />
         <Featured />
         <UsersList />

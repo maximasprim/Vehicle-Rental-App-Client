@@ -4,7 +4,7 @@ import { User } from './userSlice'; // Assuming User interface is defined in use
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api/' }), // Adjust baseUrl as per your API endpoint
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }), // Adjust baseUrl as per your API endpoint
   endpoints: (builder) => ({
     fetchUsers: builder.query<User[], void>({
       query: () => 'users', // Replace 'users' with your actual API endpoint for fetching users

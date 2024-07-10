@@ -1,4 +1,4 @@
-import Layout from "../Dashboard/Layout";
+import Layout from "./UserDashboard/Layout";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
 

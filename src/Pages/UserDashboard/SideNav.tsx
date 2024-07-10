@@ -1,26 +1,11 @@
 
-import { Users, SquareUserRound, HardDriveDownload, Menu, LogOut } from "lucide-react"
+import { Users, SquareUserRound, LogOut } from "lucide-react"
 import { Link } from "react-router-dom"
 function SideNav() {
     return (
         <ul className="menu bg-base-200  min-w-fit	min-width: fit-content; gap-2 text-base-content min-h-full">
-            <li>
-                <details open >
-                    <summary ><Menu />Dashboard</summary>
-                    <ul className="flex flex-col">
-                        <li> <Link to="analytics">Analytics</Link></li>
-                    </ul>
-                </details>
-            </li>
-            <li>
-                <details >
-                    <summary><HardDriveDownload />Drive</summary>
-                    <ul>
-                        <li><Link to="pdfs">Pdfs</Link></li>
-                        <li><Link to="add-pdfs">Add Pdf</Link></li>
-                    </ul>
-                </details>
-            </li>
+            
+            
             <li>
                 <details >
                     <summary><Users />User Profiles </summary>
@@ -31,10 +16,10 @@ function SideNav() {
                 </details>
             </li>
             <li>
-                <Link to="me"><SquareUserRound />Me</Link>
+                <Link to="me"><SquareUserRound />My Profile</Link>
             </li>
             <li>
-                <Link to="#"><LogOut />Logout</Link>
+                <Link to="/"><LogOut />Logout</Link>
             </li>
             <li>
                 <Link to="/">

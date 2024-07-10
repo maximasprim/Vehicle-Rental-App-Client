@@ -41,7 +41,7 @@ const Users: React.FC = () => {
       await deleteUser(id).unwrap();
       dispatch(deleteUserLocal(id));
     } catch (error) {
-      console.error('Failed to delete user:', error);
+      console.error('Failed to delete user ${id}', error);
     }
   };
 

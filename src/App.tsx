@@ -17,6 +17,9 @@ import Appi from './Pages/AdminDashboard/adminDashboard.tsx'
 import RegisterUser from './features/Register/register.tsx'
 import LoginUser from './features/Login/login.tsx'
 import { ToastContainer } from 'react-toastify'
+import Bookings from './features/Bookings/Booking.tsx'
+import VehiclesList from './features/Vehicles/Vehicles.tsx'
+
 
 
 const App = () => {
@@ -38,6 +41,16 @@ const router = createBrowserRouter([
     errorElement:<Error/>,
   },
   {
+    path: 'bookings',
+    element: < Bookings />,
+    errorElement:<Error/>,
+  },
+  {
+    path: 'vehicles',
+    element: < VehiclesList />,
+    errorElement:<Error/>,
+  },
+  {
     path: 'login',
     element: <LoginUser />,
     errorElement:<Error/>,
@@ -52,6 +65,7 @@ const router = createBrowserRouter([
     element: <Contact />,
     errorElement:<Error/>,
   },
+  
   {
     path: 'about',
     element: <About />,

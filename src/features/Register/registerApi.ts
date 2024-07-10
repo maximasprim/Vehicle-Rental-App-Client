@@ -16,6 +16,6 @@ export const registerApi = createApi({
   }),
 });
 
-export const { useRegisterUserMutation } = registerApi;
+export const useRegisterUserMutation: any = registerApi.useRegisterUserMutation;
 
 export default registerApi;

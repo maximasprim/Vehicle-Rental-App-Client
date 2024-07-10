@@ -3,15 +3,15 @@ import { Users, SquareUserRound, LogOut } from "lucide-react"
 import { Link } from "react-router-dom"
 function SideNav() {
     return (
-        <ul className="menu bg-base-200  min-w-fit	min-width: fit-content; gap-2 text-base-content min-h-full">
+        <ul className="menu bg-base-200  min-w-fit	min-width: fit-content; gap-10 text-base-content min-h-full">
             
             
             <li>
                 <details >
-                    <summary><Users />User Profiles </summary>
+                    <summary><Users />Bookings History </summary>
                     <ul>
-                        <li><Link to="user-profiles"> UserProfiles</Link></li>
-                        <li><Link to="users">Users</Link></li>
+                        <li><Link to="/payments"> Payments</Link></li>
+                        <li><Link to="/bookings">Bookings</Link></li>
                     </ul>
                 </details>
             </li>

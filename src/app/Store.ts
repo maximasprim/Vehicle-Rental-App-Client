@@ -6,14 +6,24 @@ import usersReducer from '../features/Users/userSlice';
 import { usersApi } from '../features/Users/userapi';
 import { registerApi } from '../features/Register/registerApi';
 import { authApi } from '../features/Login/loginApi';
+// import { paymentsApi } from '../features/Payments/paymentsApi';
+import { bookingsApi } from '../features/Bookings/BookingApi';
+import { vehiclesApi } from '../features/Vehicles/VehiclesApi'; 
+import bookingsReducer from '../features/Bookings/BookingSlice';
+import vehiclesReducer from '../features/Vehicles/VehiclesSlice';
 
 
 const rootReducer = combineReducers({
   users: usersReducer,
+  bookings: bookingsReducer,
+  vehicles: vehiclesReducer,
   
   [usersApi.reducerPath]: usersApi.reducer,
   [registerApi.reducerPath]: registerApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
+  [bookingsApi.reducerPath]: bookingsApi.reducer,
+  [vehiclesApi.reducerPath]: vehiclesApi.reducer,
+  // [paymentsApi.reducerPath]: paymentsApi.reducer,
 });
 
 const persistConfig = {
@@ -26,7 +36,8 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(usersApi.middleware).concat(registerApi.middleware).concat(authApi.middleware),
+    getDefaultMiddleware().concat(usersApi.middleware).concat(registerApi.middleware).concat(authApi.middleware).concat(bookingsApi.middleware)
+    .concat(vehiclesApi.middleware),
 });
 
 export const persistor = persistStore(store);

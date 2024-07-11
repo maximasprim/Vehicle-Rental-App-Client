@@ -10,7 +10,7 @@ import Featured from "../Components/Featured"
 import UsersList from "../features/Users/usersList"
 import RegisterUser from "../features/Register/register"
 import { ToastContainer } from "react-toastify"
-import VehiclesList from "../features/Vehicles/Vehicles"
+
 
 
 
@@ -22,7 +22,7 @@ const Home = () => {
         <Hero />
         <ToastContainer />
         <RegisterUser />
-        < VehiclesList />,
+        
         <Companies />
         <Featured />
         <UsersList />

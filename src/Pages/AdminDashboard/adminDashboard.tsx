@@ -1,6 +1,6 @@
 import React from 'react';
 import Sidebar from '../../features/Users/userSidebar'
-import Dashboard from '../../Components/dashboard/UserDashboard';
+import Dashboard from '../../Components/Admin dashboard/UserDashboard';
 import Navbar from '../../Components/Navbar';
 import Footer from '../../Components/Footer';
 

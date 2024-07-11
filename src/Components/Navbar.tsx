@@ -88,6 +88,11 @@ export default function Example() {
                   </a>
                 </MenuItem>
                 <MenuItem>
+                  <a href="/paymentStripe" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                    payment
+                  </a>
+                </MenuItem>
+                <MenuItem>
                   <a href="admin" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                     Admin Login
                   </a>

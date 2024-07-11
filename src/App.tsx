@@ -11,7 +11,7 @@ import Contact from './Pages/Contact.tsx'
 import Dashboard from './Pages/Dashboard.tsx'
 import About from './Pages/About.tsx'
 // import Users from './Components/dashboard/Users.tsx'
-import UserProfiles from './Components/dashboard/UserProfiles.tsx'
+import UserProfiles from './Components/Admin dashboard/UserProfiles.tsx'
 import UsersList from './features/Users/usersList.tsx'
 import Appi from './Pages/AdminDashboard/adminDashboard.tsx'
 import RegisterUser from './features/Register/register.tsx'
@@ -19,6 +19,8 @@ import LoginUser from './features/Login/login.tsx'
 import { ToastContainer } from 'react-toastify'
 import Bookings from './features/Bookings/Booking.tsx'
 import VehiclesList from './features/Vehicles/Vehicles.tsx'
+import VehicleSpecification from './features/VehiclesSpecifications/vSpecifications.tsx'
+import CheckoutForm from './Components/Stripe/PaymentComponent.tsx'
 
 
 
@@ -48,6 +50,16 @@ const router = createBrowserRouter([
   {
     path: 'vehicles',
     element: < VehiclesList />,
+    errorElement:<Error/>,
+  },
+  {
+    path: 'vehiclesSpecs',
+    element: < VehicleSpecification />,
+    errorElement:<Error/>,
+  },
+  {
+    path: 'paymentStripe',
+    element: < CheckoutForm />,
     errorElement:<Error/>,
   },
   {

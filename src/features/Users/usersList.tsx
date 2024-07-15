@@ -1,32 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchUsers, addUser as addUserLocal, updateUser as updateUserLocal, deleteUser as deleteUserLocal } from './userSlice';
-import { RootState, AppDispatch } from '../../app/Store';
-import { useAddUserMutation, useUpdateUserMutation, useDeleteUserMutation } from './userapi';
+import { useFetchUsersQuery, useAddUserMutation, useUpdateUserMutation, useDeleteUserMutation } from './userapi';
 
 const UsersList: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const users = useSelector((state: RootState) => state.users.users);
-  const loading = useSelector((state: RootState) => state.users.loading);
-  const error = useSelector((state: RootState) => state.users.error);
-
-  const initialUserState = { id: 0, full_name: '', email: '', contact_phone: '', address: '', role: 'user' };
-  const [newUser, setNewUser] = useState(initialUserState);
+  const { data: users = [], isLoading, error, refetch } = useFetchUsersQuery();
   const [addUser] = useAddUserMutation();
-  const [editMode, setEditMode] = useState(false);
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
 
+  const initialUserState = { user_id: 0, full_name: '', email: '', contact_phone: '', address: '', role: 'user' };
+  const [newUser, setNewUser] = useState(initialUserState);
+  const [editMode, setEditMode] = useState(false);
+
+  // Function to refetch users from API and update local storage
+  const fetchUsersAndUpdateStorage = async () => {
+    try {
+      await refetch();
+      localStorage.setItem('users', JSON.stringify(users));
+    } catch (error) {
+      console.error('Failed to refetch users:', error);
+    }
+  };
+
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    fetchUsersAndUpdateStorage();
+  }, []); // Fetch users on component mount
 
   const handleAddUser = async () => {
     try {
-      console.log("Adding user:", newUser);
       await addUser(newUser).unwrap();
-      dispatch(fetchUsers());
       setNewUser(initialUserState); // Reset the form after adding user
+      fetchUsersAndUpdateStorage(); // Fetch users after adding new user
     } catch (err) {
       console.error('Failed to add user:', err);
     }
@@ -36,46 +39,43 @@ const UsersList: React.FC = () => {
     const { name, value } = e.target;
     setNewUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
-
+  // console.log('newUser:', newUser)
   const handleUpdateUser = async () => {
+    console.log('newUser is:', newUser)
     try {
-      if (!newUser.id) {
+      if (!newUser.user_id) {
         console.error('No user ID found for update.');
         return;
       }
-      console.log("Updating user:", newUser);
-      const updatedUser = await updateUser(newUser).unwrap();
-      dispatch(updateUserLocal(updatedUser));
+      await updateUser(newUser).unwrap();
       setNewUser(initialUserState);
       setEditMode(false);
-      console.log("User updated successfully:", updatedUser);
+      fetchUsersAndUpdateStorage(); // Fetch users after updating user
     } catch (error) {
       console.error('Failed to update user:', error);
     }
   };
 
   const handleEditUser = (user: any) => {
-    console.log("Editing user:", user);
     setNewUser(user);
     setEditMode(true);
   };
-  
 
   const handleDeleteUser = async (id: number) => {
     try {
       await deleteUser(id).unwrap();
-      dispatch(deleteUserLocal(id));
+      fetchUsersAndUpdateStorage(); // Fetch users after deleting user
     } catch (error) {
-      console.error('Failed to delete user${id}', error);
+      console.error('Failed to delete user', error);
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Error: {error.message}</div>;
   }
 
   return (
@@ -145,7 +145,7 @@ const UsersList: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user, index) => (
+          {users.map((user: any, index: any) => (
             <tr key={user.id}>
               <td>{index + 1}</td>
               <td>{user.full_name}</td>

@@ -3,7 +3,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 
 const Navbar = [
-  { name: 'Dashboard', href: 'Dashboard', current: true },
+  { name: 'Dashboard', href: '/login', current: true },
   { name: 'Home', href: '/', current: false },
   { name: 'About', href: '/about', current: false },
   { name: 'Contact Us', href: 'Contact', current: false },

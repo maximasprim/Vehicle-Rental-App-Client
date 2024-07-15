@@ -12,7 +12,7 @@ const Sidebar: React.FC = () => {
             <a href="#" className="text-gray-700 hover:text-blue-600">Dashboard</a>
           </li>
           <li className="mb-4">
-            <a href="/dashboard/users" className="text-gray-700 hover:text-blue-600">Users</a>
+            <a href="/users" className="text-gray-700 hover:text-blue-600">Users</a>
           </li>
           <li className="mb-4">
             <a href="/vehicles" className="text-gray-700 hover:text-blue-600">Vehicles</a>
@@ -24,6 +24,15 @@ const Sidebar: React.FC = () => {
             <a href="/bookings" className="text-gray-700 hover:text-blue-600">Bookings</a>
           </li>
           <li className="mb-4">
+            <a href="/payments" className="text-gray-700 hover:text-blue-600">Revenue</a>
+          </li>
+          <li className="mb-4">
+            <a href="/fleetManagement" className="text-gray-700 hover:text-blue-600">Fleet Management</a>
+          </li>
+          <li className="mb-4">
+            <a href="/ticket" className="text-gray-700 hover:text-blue-600">Customer Tickets</a>
+          </li>
+          <li className="mb-4">
             <a href="#" className="text-gray-700 hover:text-blue-600">Notifications</a>
           </li>
           <li className="mb-4">
@@ -32,7 +41,7 @@ const Sidebar: React.FC = () => {
         </ul>
       </nav>
       <div className="p-4">
-        <button className="text-red-600">Logout</button>
+      <a href="/" className="text-red-700 hover:text-blue-600">Log Out</a>
       </div>
     </div>
   );

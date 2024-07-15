@@ -6,32 +6,37 @@ import usersReducer from '../features/Users/userSlice';
 import { usersApi } from '../features/Users/userapi';
 import { registerApi } from '../features/Register/registerApi';
 import { authApi } from '../features/Login/loginApi';
-// import { paymentsApi } from '../features/Payments/paymentsApi';
-import { bookingsApi } from '../features/Bookings/BookingApi';
+
+import { BookingsAPI } from '../features/Bookings/BookingApi';
 import { vehiclesApi } from '../features/Vehicles/VehiclesApi'; 
-import vehicleSpecificationsReducer from '../features/VehiclesSpecifications/vSpecificationsSlice';
-import bookingsReducer from '../features/Bookings/BookingSlice';
-import vehiclesReducer from '../features/Vehicles/VehiclesSlice';
-import { vehicleSpecificationsApi } from '../features/VehiclesSpecifications/vSpecificationsApi';
+import { vehicleSpecificationApi } from '../features/VehiclesSpecifications/vSpecificationsApi';
+import authReducer from '../features/Login/loginSlice';
+;
+import { FleetManagementApi } from '../features/Fleet/FleetApi';
+import {TicketsAPI } from '../features/customer Tickets/ticketsApi';
+import { PaymentsApi } from '../features/Payments/paymentsApi';
+// import { vSpecificationsApi } from '../features/Vehicles Featured/listApi'
 
 
 const rootReducer = combineReducers({
   users: usersReducer,
-  bookings: bookingsReducer,
-  vehicles: vehiclesReducer,
-  vehicleSpecifications: vehicleSpecificationsReducer,
-  
+  auth: authReducer,
+ 
   [usersApi.reducerPath]: usersApi.reducer,
   [registerApi.reducerPath]: registerApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
-  [bookingsApi.reducerPath]: bookingsApi.reducer,
+  [BookingsAPI.reducerPath]: BookingsAPI.reducer,
   [vehiclesApi.reducerPath]: vehiclesApi.reducer,
-  [vehicleSpecificationsApi.reducerPath]: vehicleSpecificationsApi.reducer,
-  // [paymentsApi.reducerPath]: paymentsApi.reducer,
+  [vehicleSpecificationApi.reducerPath]: vehicleSpecificationApi.reducer,
+  [FleetManagementApi.reducerPath]: FleetManagementApi.reducer,
+  [TicketsAPI.reducerPath]: TicketsAPI.reducer,
+  [PaymentsApi.reducerPath]: PaymentsApi.reducer,
+  
 });
 
 const persistConfig = {
   key: 'root',
+  
   storage,
 };
 
@@ -40,9 +45,10 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(usersApi.middleware).concat(registerApi.middleware).concat(authApi.middleware).concat(bookingsApi.middleware)
-    .concat(vehiclesApi.middleware).concat(vehicleSpecificationsApi.middleware),
-});
+    getDefaultMiddleware().concat(usersApi.middleware).concat(registerApi.middleware).concat(authApi.middleware).concat(BookingsAPI.middleware)
+    .concat(vehiclesApi.middleware).concat(FleetManagementApi.middleware).concat(vehicleSpecificationApi.middleware).concat(TicketsAPI.middleware).concat(PaymentsApi.middleware)
+    ,
+}) as any;
 
 export const persistor = persistStore(store);
 

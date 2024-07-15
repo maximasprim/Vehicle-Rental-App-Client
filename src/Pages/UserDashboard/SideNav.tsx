@@ -16,7 +16,7 @@ function SideNav() {
                 </details>
             </li>
             <li>
-                <Link to="me"><SquareUserRound />My Profile</Link>
+                <Link to="/users/:id"><SquareUserRound />My Profile</Link>
             </li>
             <li>
                 <Link to="/"><LogOut />Logout</Link>

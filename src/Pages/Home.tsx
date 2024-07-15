@@ -7,28 +7,22 @@ import Container from "../Components/Container"
 // import { benefitOne, benefitTwo } from "../utils/data"
 import Footer from "../Components/Footer"
 import Featured from "../Components/Featured"
-import UsersList from "../features/Users/usersList"
 import RegisterUser from "../features/Register/register"
 import { ToastContainer } from "react-toastify"
-
-
+import About from '../Components/about'
 
 
 const Home = () => {
   return (
     <div>
-      <Container className="bg-base-200 flex flex-col gap-6">
+      <Container className="bg-base-200 flex flex-col">
         <Navbar />
         <Hero />
         <ToastContainer />
         <RegisterUser />
-        
         <Companies />
         <Featured />
-        <UsersList />
-        {/* <JoinUs /> */}
-        {/* <Benefits data={benefitOne} /> */}
-        {/* <Benefits imgPos="right" data={benefitTwo} /> */}
+        <About />
         <Footer />
       </Container>
     </div>

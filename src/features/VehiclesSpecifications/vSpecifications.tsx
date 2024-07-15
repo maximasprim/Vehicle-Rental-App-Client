@@ -1,153 +1,224 @@
-// src/features/vehicleSpecifications/VehicleSpecifications.tsx
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchVehicleSpecifications, updateVehicleSpecification as updateVehicleSpecificationLocal, deleteVehicleSpecification as deleteVehicleSpecificationLocal } from './vSpecificationsSlice';
-import { RootState, AppDispatch } from '../../app/Store';
-import { useAddVehicleSpecificationMutation, useUpdateVehicleSpecificationMutation, useDeleteVehicleSpecificationMutation } from './vSpecificationsApi';
+import React, { useState } from 'react';
+import {
+  useGetVehicleSpecificationsQuery,
+  useCreateVehicleSpecificationMutation,
+  useUpdateVehicleSpecificationMutation,
+  useDeleteVehicleSpecificationMutation,
+} from './vSpecificationsApi';
+import { Toaster, toast } from 'sonner';
 
-const VehicleSpecification: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const vehicleSpecifications = useSelector((state: RootState) => state.vehicleSpecifications.vehicleSpecifications);
-  const loading = useSelector((state: RootState) => state.vehicleSpecifications.loading);
-  const error = useSelector((state: RootState) => state.vehicleSpecifications.error);
+export interface TVehicleSpecification {
+  vehicleSpec_id: number;
+  vehicle_id: number;
+  manufacturer: string;
+  model: string;
+  year: number;
+  fuel_type: string;
+  engine_capacity: string;
+  transmission: string;
+  seating_capacity: number;
+  color: string;
+  features: string;
+}
 
-  const initialSpecificationState = { id: 0, vehicleId: 0, key: '', value: '' };
-  const [newVehicleSpecification, setNewVehicleSpecification] = useState(initialSpecificationState);
-  const [addVehicleSpecification] = useAddVehicleSpecificationMutation();
-  const [editMode, setEditMode] = useState(false);
+const VehicleSpecifications: React.FC = () => {
+  const { data, error, isLoading } = useGetVehicleSpecificationsQuery();
+  const [createVehicleSpecification] = useCreateVehicleSpecificationMutation();
   const [updateVehicleSpecification] = useUpdateVehicleSpecificationMutation();
-  const [deleteVehicleSpecification] = useDeleteVehicleSpecificationMutation();
+  const [deleteVehicleSpecification, { data: deleteMsg }] = useDeleteVehicleSpecificationMutation();
 
-  useEffect(() => {
-    dispatch(fetchVehicleSpecifications());
-  }, [dispatch]);
+  const [formState, setFormState] = useState<Partial<TVehicleSpecification>>({
+    vehicle_id: 0,
+    manufacturer: '',
+    model: '',
+    year: 0,
+    fuel_type: '',
+    engine_capacity: '',
+    transmission: '',
+    seating_capacity: 0,
+    color: '',
+    features: '',
+  });
 
-  const handleAddVehicleSpecification = async () => {
-    try {
-      console.log("Adding vehicle specification:", newVehicleSpecification);
-      await addVehicleSpecification(newVehicleSpecification).unwrap();
-      dispatch(fetchVehicleSpecifications());
-      setNewVehicleSpecification(initialSpecificationState); // Reset the form after adding vehicle specification
-    } catch (err) {
-      console.error('Failed to add vehicle specification:', err);
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormState({
+      ...formState,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setNewVehicleSpecification((prevVehicleSpecification) => ({ ...prevVehicleSpecification, [name]: value }));
+  const handleCreate = async () => {
+    await createVehicleSpecification(formState);
+    toast.success('Vehicle specification added successfully');
+    setFormState({
+      vehicle_id: 0,
+      manufacturer: '',
+      model: '',
+      year: 0,
+      fuel_type: '',
+      engine_capacity: '',
+      transmission: '',
+      seating_capacity: 0,
+      color: '',
+      features: '',
+    });
   };
 
-  const handleUpdateVehicleSpecification = async () => {
-    try {
-      if (!newVehicleSpecification.id) {
-        console.error('No vehicle specification ID found for update.');
-        return;
-      }
-      console.log("Updating vehicle specification:", newVehicleSpecification);
-      const updatedVehicleSpecification = await updateVehicleSpecification(newVehicleSpecification).unwrap();
-      dispatch(updateVehicleSpecificationLocal(updatedVehicleSpecification));
-      setNewVehicleSpecification(initialSpecificationState);
-      setEditMode(false);
-      console.log("Vehicle specification updated successfully:", updatedVehicleSpecification);
-    } catch (error) {
-      console.error('Failed to update vehicle specification:', error);
-    }
+  const handleUpdate = (vehicleSpec_id: number) => {
+    const updateVehicleData = {
+      ...formState,
+      vehicleSpec_id,
+    };
+    updateVehicleSpecification(updateVehicleData);
+    toast.success('Vehicle specification updated successfully');
   };
 
-  const handleEditVehicleSpecification = (vehicleSpecification: any) => {
-    console.log("Editing vehicle specification:", vehicleSpecification);
-    setNewVehicleSpecification(vehicleSpecification);
-    setEditMode(true);
+  const handleDelete = async (vehicleSpec_id: number) => {
+    await deleteVehicleSpecification(vehicleSpec_id);
+    toast.success(deleteMsg?.msg || 'Vehicle specification deleted successfully');
   };
-
-  const handleDeleteVehicleSpecification = async (id: number) => {
-    try {
-      await deleteVehicleSpecification(id).unwrap();
-      dispatch(deleteVehicleSpecificationLocal(id));
-    } catch (error) {
-      console.error('Failed to delete vehicle specification:', error);
-    }
-  };
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
 
   return (
-    <div>
-      <h2>Vehicle Specifications</h2>
-      <form onSubmit={(e) => { e.preventDefault(); editMode ? handleUpdateVehicleSpecification() : handleAddVehicleSpecification(); }}>
-        <input
-          type="text"
-          name="manufacturer"
-          placeholder="Manufacturer"
-          value={newVehicleSpecification.key}
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          name="model"
-          placeholder="Model"
-          value={newVehicleSpecification.value}
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          name="year"
-          placeholder="Year"
-          value={newVehicleSpecification.value}
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          name="fuel_type"
-          placeholder="Fuel_type"
-          value={newVehicleSpecification.value}
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          name="engine_capacity"
-          placeholder="Engine_capacity"
-          value={newVehicleSpecification.value}
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          name="return_date"
-          placeholder="Return_date"
-          value={newVehicleSpecification.value}
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          name="total_amount"
-          placeholder="Total_amount"
-          value={newVehicleSpecification.value}
-          onChange={handleInputChange}
-        />
-        <select
-          name="status"
-          value={newVehicleSpecification.booking_status ? "available" : "unavailable"}
-          onChange={handleInputChange}
-          className="mr-2 p-2 border border-gray-300 rounded"
-        >
-          <option value="available">Available</option>
-          <option value="unavailable">UnAvailable</option>
-        </select>
-        <button type="submit">{editMode ? 'Update' : 'Add'} Specification</button>
-      </form>
-      <ul>
-        {vehicleSpecifications.map((vehicleSpecification) => (
-          <li key={vehicleSpecification.id}>
-            {vehicleSpecification.key}: {vehicleSpecification.value}
-            <button onClick={() => handleEditVehicleSpecification(vehicleSpecification)}>Edit</button>
-            <button onClick={() => handleDeleteVehicleSpecification(vehicleSpecification.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <Toaster
+        toastOptions={{
+          classNames: {
+            error: 'bg-red-400',
+            success: 'text-green-400',
+            warning: 'text-yellow-400',
+            info: 'bg-blue-400',
+          },
+        }}
+      />
+      <div className="min-h-screen bg-gray-800 text-white p-6">
+        <h1 className="text-2xl mb-6">Vehicle Specifications</h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <input
+            type="number"
+            name="vehicle_id"
+            placeholder="Vehicle ID"
+            value={formState.vehicle_id}
+            onChange={handleChange}
+            className="p-2 rounded border border-gray-400"
+          />
+          <input
+            type="text"
+            name="manufacturer"
+            placeholder="Manufacturer"
+            value={formState.manufacturer}
+            onChange={handleChange}
+            className="p-2 rounded border border-gray-400"
+          />
+          <input
+            type="text"
+            name="model"
+            placeholder="Model"
+            value={formState.model}
+            onChange={handleChange}
+            className="p-2 rounded border border-gray-400"
+          />
+          <input
+            type="number"
+            name="year"
+            placeholder="Year"
+            value={formState.year}
+            onChange={handleChange}
+            className="p-2 rounded border border-gray-400"
+          />
+          <input
+            type="text"
+            name="fuel_type"
+            placeholder="Fuel Type"
+            value={formState.fuel_type}
+            onChange={handleChange}
+            className="p-2 rounded border border-gray-400"
+          />
+          <input
+            type="text"
+            name="engine_capacity"
+            placeholder="Engine Capacity"
+            value={formState.engine_capacity}
+            onChange={handleChange}
+            className="p-2 rounded border border-gray-400"
+          />
+          <input
+            type="text"
+            name="transmission"
+            placeholder="Transmission"
+            value={formState.transmission}
+            onChange={handleChange}
+            className="p-2 rounded border border-gray-400"
+          />
+          <input
+            type="number"
+            name="seating_capacity"
+            placeholder="Seating Capacity"
+            value={formState.seating_capacity}
+            onChange={handleChange}
+            className="p-2 rounded border border-gray-400"
+          />
+          <input
+            type="text"
+            name="color"
+            placeholder="Color"
+            value={formState.color}
+            onChange={handleChange}
+            className="p-2 rounded border border-gray-400"
+          />
+          <input
+            type="text"
+            name="features"
+            placeholder="Features"
+            value={formState.features}
+            onChange={handleChange}
+            className="p-2 rounded border border-gray-400"
+          />
+          <button
+            onClick={handleCreate}
+            className="p-2 rounded bg-green-500 hover:bg-green-600 transition duration-300"
+          >
+            Add Specification
+          </button>
+        </div>
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error loading data</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data &&
+              data.map((spec: TVehicleSpecification) => (
+                <div key={spec.vehicleSpec_id} className="bg-gray-700 p-4 rounded">
+                  <h2 className="text-xl mb-2">{spec.manufacturer} {spec.model}</h2>
+                  <p>Vehicle ID: {spec.vehicle_id}</p>
+                  <p>Year: {spec.year}</p>
+                  <p>Fuel Type: {spec.fuel_type}</p>
+                  <p>Engine Capacity: {spec.engine_capacity}</p>
+                  <p>Transmission: {spec.transmission}</p>
+                  <p>Seating Capacity: {spec.seating_capacity}</p>
+                  <p>Color: {spec.color}</p>
+                  <p>Features: {spec.features}</p>
+                  <div className="flex justify-between mt-4">
+                    <button
+                      onClick={() => handleUpdate(spec.vehicleSpec_id)}
+                      className="p-2 bg-blue-500 rounded hover:bg-blue-600 transition duration-300"
+                    >
+                      Update
+                    </button>
+                    <button
+                      onClick={() => handleDelete(spec.vehicleSpec_id)}
+                      className="p-2 bg-red-500 rounded hover:bg-red-600 transition duration-300"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
-export default VehicleSpecification;
+export default VehicleSpecifications;

@@ -78,7 +78,7 @@ const products = [
   
   export default function Featured() {
     return (
-      <div className="bg-pink-300	background-color: rgb(249 168 212);">
+      <div className="bg-gradient-to-r from-blue-400 to-black-500;">
         <h2 className="text-black	color: rgb(0 0 0) text-center	text-align: center text-5xl	font-size: 3rem font-bold font-weight: 700;">Featured Vehicles</h2>
         <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
           <h2 className="sr-only">Products</h2>
@@ -96,14 +96,16 @@ const products = [
                 <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
                 <p className="mt-1 text-lg font-medium text-gray-900">{product.price}</p>
                 <div className='flex justify-center'>
-                <button className="bg-pink-500 hover:bg-pink-700 text-white font-bold py-1 px-2 rounded-full justify-center">More Details</button>
+                <button className="bg-green-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full justify-center">More Details</button>
                 </div>
               </a>
             ))}
           </div>
         </div>
         <div className='flex justify-center my-3.5	margin-bottom: 0.875rem;'>
-        <button className="bg-blue-500 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-full justify-center">View More</button>
+        <a href="/vehicleslist" className="block bg-blue-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full text-sm text-center">
+  View More
+</a>
         </div>
       </div>
     )

@@ -1,14 +1,14 @@
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer";
+
+
 import vehicle1 from "../assets/WhatsApp Image 2024-07-14 at 16.08.03_bf576b84.jpg";
 import vehicle2 from "../assets/WhatsApp Image 2024-07-14 at 16.08.04_11cf44c0.jpg";
 import vehicle3 from "../assets/WhatsApp Image 2024-07-14 at 16.08.04_441b8dfa.jpg";
-import Testimonials from "../Components/Testimonials";
+
 
 const About = () => {
   return (
     <>
-      <Navbar />
+      
       <section className="overflow-hidden pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] bg-white dark:bg-dark">
         <div className="container mx-auto">
           <div className="flex flex-wrap items-center justify-between -mx-4">
@@ -631,8 +631,8 @@ const About = () => {
           </div>
         </div>
       </section>
-      <Testimonials/>
-      <Footer />
+      
+      
     </>
   );
 };

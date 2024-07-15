@@ -1,40 +1,70 @@
-// src/features/vehicleSpecifications/vehicleSpecificationsApi.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { VehicleSpecification } from './vSpecificationsSlice';
 
-export const vehicleSpecificationsApi = createApi({
-  reducerPath: 'vehicleSpecificationsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }),
+export interface TVehicleSpecification {
+  vehicle_id: number;
+  manufacturer: string;
+  model: string;
+  year: number;
+  fuel_type: string;
+  engine_type: string;
+  return_date: string;
+  total_amount: number;
+  booking_status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// Define the API slice
+export const vehicleSpecificationApi = createApi({
+  reducerPath: 'vehicleSpecificationApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:3000',
+    prepareHeaders: (headers) => {
+      const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
+      const token = userDetails?.token;
+      console.log('Token:', token);
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
+  tagTypes: ['VehicleSpecification'],
   endpoints: (builder) => ({
-    fetchVehicleSpecifications: builder.query<VehicleSpecification[], void>({
+    getVehicleSpecifications: builder.query<TVehicleSpecification[], void>({
       query: () => 'vehiclesSpecifications',
+      providesTags: ['VehicleSpecification'],
     }),
-    addVehicleSpecification: builder.mutation<VehicleSpecification, Partial<VehicleSpecification>>({
-      query: (vehicleSpecification) => ({
+    createVehicleSpecification: builder.mutation<TVehicleSpecification, Partial<TVehicleSpecification>>({
+      query: (newSpec) => ({
         url: 'vehiclesSpecifications',
         method: 'POST',
-        body: vehicleSpecification,
+        body: newSpec,
       }),
+      invalidatesTags: ['VehicleSpecification'],
     }),
-    updateVehicleSpecification: builder.mutation<VehicleSpecification, Partial<VehicleSpecification>>({
-      query: ({ id, ...vehicleSpecification }) => ({
-        url: `vehiclesSpecifications/${id}`,
+    updateVehicleSpecification: builder.mutation<TVehicleSpecification, Partial<TVehicleSpecification>>({
+      query: ({ vehicle_id, ...rest }) => ({
+        url: `vehiclesSpecifications/${vehicle_id}`,
         method: 'PUT',
-        body: vehicleSpecification,
+        body: rest,
       }),
+      invalidatesTags: ['VehicleSpecification'],
     }),
-    deleteVehicleSpecification: builder.mutation<{ success: boolean; id: number }, number>({
-      query: (id) => ({
-        url: `vehiclesSpecifications/${id}`,
+    deleteVehicleSpecification: builder.mutation<{ success: boolean; vehicle_id: number }, number>({
+      query: (vehicle_id) => ({
+        url: `vehiclesSpecifications/${vehicle_id}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['VehicleSpecification'],
     }),
   }),
 });
 
-export const useFetchVehicleSpecificationsQuery: typeof vehicleSpecificationsApi.useFetchVehicleSpecificationsQuery = vehicleSpecificationsApi.useFetchVehicleSpecificationsQuery;
-export const useAddVehicleSpecificationMutation: typeof vehicleSpecificationsApi.useAddVehicleSpecificationMutation = vehicleSpecificationsApi.useAddVehicleSpecificationMutation;
-export const useUpdateVehicleSpecificationMutation: typeof vehicleSpecificationsApi.useUpdateVehicleSpecificationMutation = vehicleSpecificationsApi.useUpdateVehicleSpecificationMutation;
-export const useDeleteVehicleSpecificationMutation: typeof vehicleSpecificationsApi.useDeleteVehicleSpecificationMutation = vehicleSpecificationsApi.useDeleteVehicleSpecificationMutation;
-
-export default vehicleSpecificationsApi;
+// Export the auto-generated hooks
+export const {
+  useGetVehicleSpecificationsQuery,
+  useCreateVehicleSpecificationMutation,
+  useUpdateVehicleSpecificationMutation,
+  useDeleteVehicleSpecificationMutation,
+}:any = vehicleSpecificationApi;

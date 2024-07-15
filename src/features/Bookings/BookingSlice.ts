@@ -1,47 +1,35 @@
-// src/features/bookings/bookingsSlice.ts
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Booking } from './BookingApi';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TBookedVehicles } from './BookingApi';
 
-export interface BookingsState {
-  bookings: Booking[];
-  loading: boolean;
-  error: string | null;
+interface BookingsState {
+  bookings: TBookedVehicles[];
 }
 
 const initialState: BookingsState = {
   bookings: [],
-  loading: false,
-  error: null,
 };
-
-// Async thunk to fetch bookings
-export const fetchBookings:any = createAsyncThunk('bookings/fetchBookings', async () => {
-  const response = await fetch('http://localhost:3000/bookings'); // Replace with your actual API endpoint
-  if (!response.ok) {
-    throw new Error('Failed to fetch bookings');
-  }
-  return (await response.json()) as Booking[];
-});
 
 const bookingsSlice = createSlice({
   name: 'bookings',
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchBookings.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchBookings.fulfilled, (state, action: PayloadAction<Booking[]>) => {
-        state.loading = false;
-        state.bookings = action.payload;
-      })
-      .addCase(fetchBookings.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Failed to fetch bookings';
-      });
+  reducers: {
+    setBookings(state, action: PayloadAction<TBookedVehicles[]>) {
+      state.bookings = action.payload;
+    },
+    addBooking(state, action: PayloadAction<TBookedVehicles>) {
+      state.bookings.push(action.payload);
+    },
+    updateBooking(state, action: PayloadAction<TBookedVehicles>) {
+      const index = state.bookings.findIndex(booking => booking.booking_id === action.payload.booking_id);
+      if (index !== -1) {
+        state.bookings[index] = action.payload;
+      }
+    },
+    deleteBooking(state, action: PayloadAction<number>) {
+      state.bookings = state.bookings.filter(booking => booking.booking_id !== action.payload);
+    },
   },
 });
 
+export const { setBookings, addBooking, updateBooking, deleteBooking } = bookingsSlice.actions;
 export default bookingsSlice.reducer;

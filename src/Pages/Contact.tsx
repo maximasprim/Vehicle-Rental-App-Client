@@ -1,26 +1,26 @@
 import Navbar from "../Components/Navbar";
-import React from 'react'
-import { Menu, X, MapPin } from 'lucide-react'
-import { useState } from 'react'
+// import React from 'react'
+// import { Menu, X, MapPin } from 'lucide-react'
+// import { useState } from 'react'
 import Footer from "../Components/Footer";
 
-const menuItems = [
-    {
-        name: 'Home',
-        href: '#',
-    },
-    {
-        name: 'About',
-        href: '#',
-    },
-    {
-        name: 'Contact',
-        href: '#',
-    },
-]
+// const menuItems = [
+//     {
+//         name: 'Home',
+//         href: '#',
+//     },
+//     {
+//         name: 'About',
+//         href: '#',
+//     },
+//     {
+//         name: 'Contact',
+//         href: '#',
+//     },
+// ]
 
 export default function Contact() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
+    // const [isMenuOpen, setIsMenuOpen] = useState(false)
     return (
         <>
             <Navbar />
@@ -35,7 +35,7 @@ export default function Contact() {
                     <p className="text-center text-3xl font-bold text-neutral-50 content md:text-5xl md:leading-10">
                         Love to hear from you
                     </p>
-                    <p className="mx-auto text-xl max-w-4xl text-center text-base text-neutral-400 md:text-xl">
+                    <p className="mx-auto text-xl max-w-4xl text-center  text-neutral-400 md:text-xl">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore veritatis voluptates
                         neque itaque repudiandae sint, explicabo assumenda quam ratione placeat?
                     </p>

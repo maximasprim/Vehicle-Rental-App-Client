@@ -21,9 +21,13 @@ const LoginUser: React.FC = () => {
       dispatch(setCredentials(userData));
       setMessage('Login successful!');
       console.log('Login successful:', userData)
-      navigate('/dashboard');
-      
-      // Optionally, handle success actions like redirecting to another page
+       // Navigate based on the role
+       if (userData.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
+
     } catch (error) {
       setMessage('Login failed!');
       console.error('Failed to login:', error);

@@ -1,29 +1,55 @@
-// src/features/users/userApi.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { User } from './userSlice'; // Assuming User interface is defined in userSlice
+import { RootState } from '../../app/Store'; // Adjust the import according to your project structure
+
+export interface User {
+  user_id: number;
+  full_name: string;
+  email: string;
+  contact_phone?: string;
+  address?: string;
+  role: string;
+  created_at: string;
+  updated_at: string;
+}
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }), // Adjust baseUrl as per your API endpoint
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:3000',
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).auth.token;
+      console.log('Token:', token);
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     fetchUsers: builder.query<User[], void>({
-      query: () => 'users', // Replace 'users' with your actual API endpoint for fetching users
+      query: (user) =>({
+        url: 'users',
+        // headers.set('Authorization', `Bearer ${token}`);
+        method: 'GET',
+        body: user,
+      }) 
     }),
     addUser: builder.mutation<User, Partial<User>>({
       query: (user) => ({
         url: 'users',
+       
         method: 'POST',
         body: user,
       }),
     }),
     updateUser: builder.mutation<User, Partial<User>>({
-      query: ({ id, ...user }) => ({
-        url: `users/${id}`,
+      query: ({ user_id, ...user }) => ({
+        url: `users/${user_id}`,
         method: 'PUT',
         body: user,
       }),
     }),
-    deleteUser: builder.mutation<{ success: boolean; id: number }, number>({
+    deleteUser: builder.mutation<{ id: number }, number>({
       query: (id) => ({
         url: `users/${id}`,
         method: 'DELETE',
@@ -37,6 +63,4 @@ export const {
   useAddUserMutation, 
   useUpdateUserMutation, 
   useDeleteUserMutation 
-} = usersApi;
-
-export default usersApi;
+}:any = usersApi;

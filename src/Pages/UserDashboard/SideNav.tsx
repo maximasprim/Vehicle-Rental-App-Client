@@ -1,6 +1,20 @@
 
 import { Users, SquareUserRound, LogOut } from "lucide-react"
 import { Link } from "react-router-dom"
+// import { clearCredentials} from "../../features/Login/loginSlice"
+// import { useDispatch } from "react-redux"
+// import { useNavigate } from "react-router-dom";
+
+// const navigate = useNavigate();
+//     const dispatch = useDispatch();
+//     // const { isAuthenticated } = useSelector(
+//     //     (state: RootState) => state.userAuthentication
+//     // );
+ 
+//     const handleLogOut = () => {
+//         dispatch(logout());
+//         navigate("/login");
+//     };
 function SideNav() {
     return (
         <ul className="menu bg-base-200  min-w-fit	min-width: fit-content; gap-10 text-base-content min-h-full">
@@ -16,7 +30,7 @@ function SideNav() {
                 </details>
             </li>
             <li>
-                <Link to="/users/:id"><SquareUserRound />My Profile</Link>
+                <Link to='/users/:user_id'><SquareUserRound />My Profile</Link>
             </li>
             <li>
                 <Link to="/"><LogOut />Logout</Link>

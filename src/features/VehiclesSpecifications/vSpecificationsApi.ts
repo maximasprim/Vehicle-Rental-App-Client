@@ -6,7 +6,11 @@ export interface TVehicleSpecification {
   model: string;
   year: number;
   fuel_type: string;
-  engine_type: string;
+  engine_capacity: string;
+  transmission: string;
+  seating_capacity: number;
+  color: string;
+  features: string;
   return_date: string;
   total_amount: number;
   booking_status: string;

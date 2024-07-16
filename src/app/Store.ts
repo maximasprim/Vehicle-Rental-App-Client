@@ -31,6 +31,7 @@ const rootReducer = combineReducers({
   [FleetManagementApi.reducerPath]: FleetManagementApi.reducer,
   [TicketsAPI.reducerPath]: TicketsAPI.reducer,
   [PaymentsApi.reducerPath]: PaymentsApi.reducer,
+  // [vSpecificationsApi.reducerPath]: vSpecificationsApi.reducer,
   
 });
 

@@ -27,17 +27,20 @@ export const usersApi = createApi({
   }),
   endpoints: (builder) => ({
     fetchUsers: builder.query<User[], void>({
-      query: (user) =>({
+      query: () => ({
         url: 'users',
-        // headers.set('Authorization', `Bearer ${token}`);
         method: 'GET',
-        body: user,
-      }) 
+      }),
+    }),
+    fetchUserById: builder.query<User, number>({
+      query: (user_id) => ({
+        url: `users/${user_id}`,
+        method: 'GET',
+      }),
     }),
     addUser: builder.mutation<User, Partial<User>>({
       query: (user) => ({
         url: 'users',
-       
         method: 'POST',
         body: user,
       }),
@@ -60,6 +63,7 @@ export const usersApi = createApi({
 
 export const { 
   useFetchUsersQuery, 
+  useFetchUserByIdQuery, // Add this line
   useAddUserMutation, 
   useUpdateUserMutation, 
   useDeleteUserMutation 

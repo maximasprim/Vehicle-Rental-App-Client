@@ -50,7 +50,7 @@ const usersSlice = createSlice({
       })
       .addMatcher(usersApi.endpoints.updateUser.matchFulfilled, (state, action) => {
         state.loading = false;
-        const index = state.users.findIndex((user) => user.id === action.payload.id);
+        const index = state.users.findIndex((user) => user.user_id === action.payload.user_id);
         if (index !== -1) {
           state.users[index] = action.payload;
         }
@@ -65,7 +65,7 @@ const usersSlice = createSlice({
       })
       .addMatcher(usersApi.endpoints.deleteUser.matchFulfilled, (state, action) => {
         state.loading = false;
-        state.users = state.users.filter((user) => user.id !== action.payload);
+        state.users = state.users.filter((user) => user.user_id !== action.payload);
       })
       .addMatcher(usersApi.endpoints.deleteUser.matchRejected, (state, action) => {
         state.loading = false;

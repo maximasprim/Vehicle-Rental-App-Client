@@ -1,5 +1,6 @@
 import heroImg from '../assets/bg_1.jpg';
 import { CircleArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Hero() {
   return (
@@ -15,7 +16,10 @@ export default function Hero() {
           <p className="py-6 text-base	line-height: 1.5rem text-slate-200	color: rgb(203 213 225);">
           Welcome to Maximas CarBook, the ultimate solution for hassle-free vehicle rentals. Whether you're planning a weekend getaway or managing a fleet of vehicles, our intuitive platform offers you a seamless experience. With features like real-time booking, secure payments, and comprehensive vehicle management, we ensure that your journey is smooth from start to finish. Join us today and explore a new era of vehicle rentals with unmatched convenience and reliability.
           </p>
-          <button className="btn btn-outline btn-info">Easy Steps For Renting a Car<CircleArrowRight /></button>
+          <Link
+      to="/steps"
+      className="btn btn-outline btn-info">Easy Steps For Renting a Car<CircleArrowRight />
+    </Link>
           
         </div>
         

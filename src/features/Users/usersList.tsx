@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFetchUsersQuery, useAddUserMutation, useUpdateUserMutation, useDeleteUserMutation } from './userapi';
+import UserDetails from './singleUserComponent';
 
 const UsersList: React.FC = () => {
   const { data: users = [], isLoading, error, refetch } = useFetchUsersQuery();
   const [addUser] = useAddUserMutation();
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const initialUserState = { user_id: 0, full_name: '', email: '', contact_phone: '', address: '', role: 'user' };
   const [newUser, setNewUser] = useState(initialUserState);
   const [editMode, setEditMode] = useState(false);
 
-  // Function to refetch users from API and update local storage
   const fetchUsersAndUpdateStorage = async () => {
     try {
       await refetch();
@@ -23,13 +26,13 @@ const UsersList: React.FC = () => {
 
   useEffect(() => {
     fetchUsersAndUpdateStorage();
-  }, []); // Fetch users on component mount
+  }, [users]);
 
   const handleAddUser = async () => {
     try {
       await addUser(newUser).unwrap();
-      setNewUser(initialUserState); // Reset the form after adding user
-      fetchUsersAndUpdateStorage(); // Fetch users after adding new user
+      setNewUser(initialUserState);
+      fetchUsersAndUpdateStorage();
     } catch (err) {
       console.error('Failed to add user:', err);
     }
@@ -39,9 +42,8 @@ const UsersList: React.FC = () => {
     const { name, value } = e.target;
     setNewUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
-  // console.log('newUser:', newUser)
+
   const handleUpdateUser = async () => {
-    console.log('newUser is:', newUser)
     try {
       if (!newUser.user_id) {
         console.error('No user ID found for update.');
@@ -50,7 +52,7 @@ const UsersList: React.FC = () => {
       await updateUser(newUser).unwrap();
       setNewUser(initialUserState);
       setEditMode(false);
-      fetchUsersAndUpdateStorage(); // Fetch users after updating user
+      fetchUsersAndUpdateStorage();
     } catch (error) {
       console.error('Failed to update user:', error);
     }
@@ -64,10 +66,15 @@ const UsersList: React.FC = () => {
   const handleDeleteUser = async (id: number) => {
     try {
       await deleteUser(id).unwrap();
-      fetchUsersAndUpdateStorage(); // Fetch users after deleting user
+      fetchUsersAndUpdateStorage();
     } catch (error) {
       console.error('Failed to delete user', error);
     }
+  };
+
+  const handleViewUser = (id: number) => {
+    setSelectedUserId(id);
+    navigate(`/users/${id}`);
   };
 
   if (isLoading) {
@@ -81,7 +88,7 @@ const UsersList: React.FC = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Users List</h1>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <input
           type="text"
@@ -126,12 +133,16 @@ const UsersList: React.FC = () => {
         </select>
 
         {editMode ? (
-          <button onClick={handleUpdateUser} className="btn btn-primary w-full">Update User</button>
+          <button onClick={handleUpdateUser} className="btn btn-primary w-full">
+            Update User
+          </button>
         ) : (
-          <button onClick={handleAddUser} className="btn btn-primary w-full">Add User</button>
+          <button onClick={handleAddUser} className="btn btn-primary w-full">
+            Add User
+          </button>
         )}
       </div>
-      
+
       <table className="table-auto w-full">
         <thead>
           <tr>
@@ -146,7 +157,7 @@ const UsersList: React.FC = () => {
         </thead>
         <tbody>
           {users.map((user: any, index: any) => (
-            <tr key={user.id}>
+            <tr key={user.user_id}>
               <td>{index + 1}</td>
               <td>{user.full_name}</td>
               <td>{user.email}</td>
@@ -154,15 +165,24 @@ const UsersList: React.FC = () => {
               <td>{user.address}</td>
               <td>{user.role}</td>
               <td>
-                <div className='flex space-x-2'>
-                  <button className='btn btn-sm btn-info' onClick={() => handleEditUser(user)}>Edit</button>
-                  <button className='btn btn-sm btn-error' onClick={() => handleDeleteUser(user.id)}>Delete</button>
+                <div className="flex space-x-2">
+                  <button className="btn btn-sm btn-info" onClick={() => handleEditUser(user)}>
+                    Edit
+                  </button>
+                  <button className="btn btn-sm btn-error" onClick={() => handleDeleteUser(user.user_id)}>
+                    Delete
+                  </button>
+                  <button className="btn btn-sm btn-primary" onClick={() => handleViewUser(user.user_id)}>
+                    View
+                  </button>
                 </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {selectedUserId && <UserDetails userId={selectedUserId} />}
     </div>
   );
 };

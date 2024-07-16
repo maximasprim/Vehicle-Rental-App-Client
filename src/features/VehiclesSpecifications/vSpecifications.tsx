@@ -6,6 +6,8 @@ import {
   useDeleteVehicleSpecificationMutation,
 } from './vSpecificationsApi';
 import { Toaster, toast } from 'sonner';
+import VehicleSpecificationForm from '../../Components/Add Specification Form';
+import ActionButton from '../../Components/Action Button';
 
 export interface TVehicleSpecification {
   vehicleSpec_id: number;
@@ -39,6 +41,8 @@ const VehicleSpecifications: React.FC = () => {
     color: '',
     features: '',
   });
+
+  const [selectedSpec, setSelectedSpec] = useState<null | TVehicleSpecification>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormState({
@@ -78,6 +82,14 @@ const VehicleSpecifications: React.FC = () => {
     toast.success(deleteMsg?.msg || 'Vehicle specification deleted successfully');
   };
 
+  const handleCardClick = (spec: TVehicleSpecification) => {
+    setSelectedSpec(spec);
+  };
+
+  const handleBackToList = () => {
+    setSelectedSpec(null);
+  };
+
   return (
     <>
       <Toaster
@@ -92,125 +104,124 @@ const VehicleSpecifications: React.FC = () => {
       />
       <div className="min-h-screen bg-gray-800 text-white p-6">
         <h1 className="text-2xl mb-6">Vehicle Specifications</h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <input
-            type="number"
-            name="vehicle_id"
-            placeholder="Vehicle ID"
-            value={formState.vehicle_id}
-            onChange={handleChange}
-            className="p-2 rounded border border-gray-400"
-          />
-          <input
-            type="text"
-            name="manufacturer"
-            placeholder="Manufacturer"
-            value={formState.manufacturer}
-            onChange={handleChange}
-            className="p-2 rounded border border-gray-400"
-          />
-          <input
-            type="text"
-            name="model"
-            placeholder="Model"
-            value={formState.model}
-            onChange={handleChange}
-            className="p-2 rounded border border-gray-400"
-          />
-          <input
-            type="number"
-            name="year"
-            placeholder="Year"
-            value={formState.year}
-            onChange={handleChange}
-            className="p-2 rounded border border-gray-400"
-          />
-          <input
-            type="text"
-            name="fuel_type"
-            placeholder="Fuel Type"
-            value={formState.fuel_type}
-            onChange={handleChange}
-            className="p-2 rounded border border-gray-400"
-          />
-          <input
-            type="text"
-            name="engine_capacity"
-            placeholder="Engine Capacity"
-            value={formState.engine_capacity}
-            onChange={handleChange}
-            className="p-2 rounded border border-gray-400"
-          />
-          <input
-            type="text"
-            name="transmission"
-            placeholder="Transmission"
-            value={formState.transmission}
-            onChange={handleChange}
-            className="p-2 rounded border border-gray-400"
-          />
-          <input
-            type="number"
-            name="seating_capacity"
-            placeholder="Seating Capacity"
-            value={formState.seating_capacity}
-            onChange={handleChange}
-            className="p-2 rounded border border-gray-400"
-          />
-          <input
-            type="text"
-            name="color"
-            placeholder="Color"
-            value={formState.color}
-            onChange={handleChange}
-            className="p-2 rounded border border-gray-400"
-          />
-          <input
-            type="text"
-            name="features"
-            placeholder="Features"
-            value={formState.features}
-            onChange={handleChange}
-            className="p-2 rounded border border-gray-400"
-          />
-          <button
-            onClick={handleCreate}
-            className="p-2 rounded bg-green-500 hover:bg-green-600 transition duration-300"
-          >
-            Add Specification
-          </button>
-        </div>
+        <VehicleSpecificationForm
+          formState={formState}
+          handleChange={handleChange}
+          handleCreate={handleCreate}
+        />
         {isLoading ? (
           <p>Loading...</p>
         ) : error ? (
           <p>Error loading data</p>
+        ) : selectedSpec ? (
+          <div className="bg-gray-700 p-6 rounded-lg shadow-lg">
+            <button
+  onClick={handleBackToList}
+  className="mb-4 px-4 py-2 bg-orange-500 text-white font-semibold rounded shadow hover:bg-blue-600 transition duration-300"
+>
+  Back to List
+</button>
+            <img
+              src={`https://via.placeholder.com/300x200?text=${selectedSpec.manufacturer} ${selectedSpec.model}`}
+              alt={`${selectedSpec.manufacturer} ${selectedSpec.model}`}
+              className="w-full h-96 object-cover mb-4 rounded transition-transform duration-300 ease-in-out"
+            />
+            <h2 className="text-xl font-bold mb-4 text-center">{selectedSpec.manufacturer} {selectedSpec.model}</h2>
+            <div className="bg-gray-800 p-4 rounded-lg">
+              <div className="flex justify-between mb-1">
+                <span className="font-semibold">Vehicle ID:</span>
+                <span className="text-green-300">{selectedSpec.vehicle_id}</span>
+              </div>
+              <div className="flex justify-between mb-1">
+                <span className="font-semibold">Year:</span>
+                <span className="text-green-300">{selectedSpec.year}</span>
+              </div>
+              <div className="flex justify-between mb-1">
+                <span className="font-semibold">Fuel Type:</span>
+                <span className="text-green-300">{selectedSpec.fuel_type}</span>
+              </div>
+              <div className="flex justify-between mb-1">
+                <span className="font-semibold">Engine Capacity:</span>
+                <span className="text-green-300">{selectedSpec.engine_capacity}</span>
+              </div>
+              <div className="flex justify-between mb-1">
+                <span className="font-semibold">Transmission:</span>
+                <span className="text-green-300">{selectedSpec.transmission}</span>
+              </div>
+              <div className="flex justify-between mb-1">
+                <span className="font-semibold">Seating Capacity:</span>
+                <span className="text-green-300">{selectedSpec.seating_capacity}</span>
+              </div>
+              <div className="flex justify-between mb-1">
+                <span className="font-semibold">Color:</span>
+                <span className="text-green-300">{selectedSpec.color}</span>
+              </div>
+              <div className="flex justify-between mb-1">
+                <span className="font-semibold">Features:</span>
+                <span className="text-green-300">{selectedSpec.features}</span>
+              </div>
+            </div>
+            <div className="flex justify-between mt-4">
+              <ActionButton
+                label="Update"
+                onClick={() => handleUpdate(selectedSpec.vehicleSpec_id)}
+                color="blue"
+              />
+              <ActionButton
+                label="Delete"
+                onClick={() => handleDelete(selectedSpec.vehicleSpec_id)}
+                color="red"
+              />
+            </div>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data &&
               data.map((spec: TVehicleSpecification) => (
-                <div key={spec.vehicleSpec_id} className="bg-gray-700 p-4 rounded">
-                  <h2 className="text-xl mb-2">{spec.manufacturer} {spec.model}</h2>
-                  <p>Vehicle ID: {spec.vehicle_id}</p>
-                  <p>Year: {spec.year}</p>
-                  <p>Fuel Type: {spec.fuel_type}</p>
-                  <p>Engine Capacity: {spec.engine_capacity}</p>
-                  <p>Transmission: {spec.transmission}</p>
-                  <p>Seating Capacity: {spec.seating_capacity}</p>
-                  <p>Color: {spec.color}</p>
-                  <p>Features: {spec.features}</p>
-                  <div className="flex justify-between mt-4">
-                    <button
-                      onClick={() => handleUpdate(spec.vehicleSpec_id)}
-                      className="p-2 bg-blue-500 rounded hover:bg-blue-600 transition duration-300"
-                    >
-                      Update
-                    </button>
-                    <button
-                      onClick={() => handleDelete(spec.vehicleSpec_id)}
-                      className="p-2 bg-red-500 rounded hover:bg-red-600 transition duration-300"
-                    >
-                      Delete
-                    </button>
+                <div
+                  key={spec.vehicleSpec_id}
+                  className="bg-gray-700 p-6 rounded-lg shadow-lg cursor-pointer"
+                  onClick={() => handleCardClick(spec)}
+                >
+                  <img
+                    src={`https://via.placeholder.com/300x200?text=${spec.manufacturer} ${spec.model}`}
+                    alt={`${spec.manufacturer} ${spec.model}`}
+                    className="w-full h-48 object-cover mb-4 rounded transition-transform duration-300 ease-in-out"
+                  />
+                  <h2 className="text-xl font-bold mb-4 text-center">{spec.manufacturer} {spec.model}</h2>
+                  <div className="bg-gray-800 p-4 rounded-lg">
+                    <div className="flex justify-between mb-1">
+                      <span className="font-semibold">Vehicle ID:</span>
+                      <span className="text-green-300">{spec.vehicle_id}</span>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                      <span className="font-semibold">Year:</span>
+                      <span className="text-green-300">{spec.year}</span>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                      <span className="font-semibold">Fuel Type:</span>
+                      <span className="text-green-300">{spec.fuel_type}</span>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                      <span className="font-semibold">Engine Capacity:</span>
+                      <span className="text-green-300">{spec.engine_capacity}</span>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                      <span className="font-semibold">Transmission:</span>
+                      <span className="text-green-300">{spec.transmission}</span>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                      <span className="font-semibold">Seating Capacity:</span>
+                      <span className="text-green-300">{spec.seating_capacity}</span>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                      <span className="font-semibold">Color:</span>
+                      <span className="text-green-300">{spec.color}</span>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                      <span className="font-semibold">Features:</span>
+                      <span className="text-green-300">{spec.features}</span>
+                    </div>
                   </div>
                 </div>
               ))}

@@ -68,7 +68,7 @@ export default function Companies() {
       <h1 className="text-5xl font-bold mb-8 text-green-800">
         Available Car<span className="text-gray-50	color: rgb(249 250 251);" > Companies</span>
       </h1>
-      <div className="flex flex-row place-items-start min-w-lg bg-white shadow-lg p-8 rounded-lg gap-8">
+      <div className="flex flex-row place-items-start min-w-lg bg-white shadow-lg p-1 rounded-lg gap-8">
         <div className="flex flex-col w-1/2 h-screen gap-36" >
         <img
           src={companiesPhoto}

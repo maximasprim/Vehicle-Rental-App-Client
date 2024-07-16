@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
             <a href="/vehicles" className="text-gray-700 hover:text-blue-600">Vehicles</a>
           </li>
           <li className="mb-4">
-            <a href="/vehiclesSpecs" className="text-gray-700 hover:text-blue-600">VehiclesSpecifications</a>
+            <a href="/vehiclesSpecifications" className="text-gray-700 hover:text-blue-600">VehiclesSpecifications</a>
           </li>
           <li className="mb-4">
             <a href="/bookings" className="text-gray-700 hover:text-blue-600">Bookings</a>
@@ -33,10 +33,10 @@ const Sidebar: React.FC = () => {
             <a href="/ticket" className="text-gray-700 hover:text-blue-600">Customer Tickets</a>
           </li>
           <li className="mb-4">
-            <a href="#" className="text-gray-700 hover:text-blue-600">Notifications</a>
+            <a href="/cloudinaryform" className="text-gray-700 hover:text-blue-600">Upload Vehicles Images</a>
           </li>
           <li className="mb-4">
-            <a href="#" className="text-gray-700 hover:text-blue-600">Settings</a>
+            <a href="/cloudinary" className="text-gray-700 hover:text-blue-600">Settings</a>
           </li>
         </ul>
       </nav>

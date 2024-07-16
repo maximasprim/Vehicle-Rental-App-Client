@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGetBookingsQuery, useDeleteBookingsMutation, useUpdateBookingsMutation } from './BookingApi';
 import { Toaster, toast } from 'sonner';
+import BookingForm from '../../Components/BookingForm';
 
 export interface TBookings {
   booking_id: number;
@@ -16,17 +17,17 @@ export interface TBookings {
 }
 
 const Bookings: React.FC = () => {
-  const { data, error, isLoading } = useGetBookingsQuery();
+  const { data, isLoading } = useGetBookingsQuery();
   const [updateBooking] = useUpdateBookingsMutation();
   const [deleteBooking, { data: deleteMsg }] = useDeleteBookingsMutation();
-console.log(error);
+
   const handleUpdate = (booking_id: number) => {
     const updateBookingData = {
       booking_status: 'booking updated',
     };
     updateBooking({ booking_id, ...updateBookingData });
   };
-console.log(data);
+
   const handleDelete = async (booking_id: number) => {
     await deleteBooking(booking_id);
     toast.success(deleteMsg?.msg || 'Booking deleted successfully');
@@ -46,6 +47,7 @@ console.log(data);
       />
       <div className="overflow-x-auto bg-gray-800 text-white rounded-lg p-4">
         <h1 className="text-xl my-4">My Bookings</h1>
+        <BookingForm />
         <table className="table table-xs">
           <thead>
             <tr>

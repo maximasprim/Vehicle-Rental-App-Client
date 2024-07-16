@@ -2,9 +2,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/Store';
 
+interface User {
+  user_id: number;
+  full_name: string;
+  email: string;
+  contact_phone?: string;
+  address?: string;
+  role: string;
+  // created_at: string;
+  // updated_at: string;
+}
+
 interface AuthState {
   token: string | null;
-  user: any | null;
+  user: User | null;
   error: string | null;
 }
 
@@ -18,12 +29,18 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<{ token: string; user: any }>) => {
+    setCredentials: (state, action: PayloadAction<{ token: string; user: User }>) => {
       state.token = action.payload.token;
       state.user = action.payload.user;
       state.error = null;
       // Store the token in local storage
       localStorage.setItem('token', action.payload.token);
+      // Store the user ID in local storage if it exists
+      if (action.payload.user.user_id !== undefined) {
+        localStorage.setItem('user_id', action.payload.user.user_id.toString());
+      } else {
+        console.error('user_id is undefined');
+      }
     },
     clearCredentials: (state) => {
       state.token = null;
@@ -31,6 +48,8 @@ const authSlice = createSlice({
       state.error = null;
       // Remove the token from local storage
       localStorage.removeItem('token');
+      // Remove the user ID from local storage
+      localStorage.removeItem('user_id');
     },
     setError: (state, action: PayloadAction<string>) => {
       state.error = action.payload;

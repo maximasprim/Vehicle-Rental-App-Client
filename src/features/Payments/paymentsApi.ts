@@ -15,7 +15,7 @@ export interface TPayment {
 export const PaymentsApi = createApi({
   reducerPath: 'paymentsApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'https://vehicle-renting-service-api.onrender.com/',
     prepareHeaders: (headers) => {
       const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
       const token = userDetails?.token;
@@ -54,6 +54,23 @@ export const PaymentsApi = createApi({
       }),
       invalidatesTags: ['Payments'],
     }),
+    createCheckoutSession: builder.mutation<any, { booking_id: number; amount: number }>({
+      query: (data) => ({
+        url: 'payments/create-checkout-session',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    handleWebhook: builder.mutation<any, { payload: any }>({
+      query: (data) => ({
+        url: 'payments/webhook',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    testCreateCheckoutSession: builder.query<any, void>({
+      query: () => 'payments/test-checkout-session',
+    }),
   }),
 });
 
@@ -62,4 +79,7 @@ export const {
   useCreatePaymentMutation,
   useUpdatePaymentMutation,
   useDeletePaymentMutation,
+  useCreateCheckoutSessionMutation,
+  useHandleWebhookMutation,
+  useTestCreateCheckoutSessionQuery,
 }: any = PaymentsApi;

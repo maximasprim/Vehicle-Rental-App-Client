@@ -23,7 +23,7 @@ export default function App() {
   const myImage = cld.image(publicId);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-400 to-gray-600 text-white p-6">
+    <div className="min-h-screen bg-gradient-to-r from-blue-400 to-gray-600 text-white p-6 w-full">
       <h3 className="text-4xl font-bold mb-6 text-center">Maximuas CarBook Upload Vehicles Images</h3>
       <div className="flex flex-col items-center mb-8">
         <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />

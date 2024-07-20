@@ -19,7 +19,7 @@ import LoginUser from './features/Login/login.tsx'
 import { ToastContainer } from 'react-toastify'
 import Bookings from './features/Bookings/Booking.tsx'
 import VehicleSpecifications from './features/VehiclesSpecifications/vSpecifications.tsx'
-import CheckoutForm from './Components/Stripe/PaymentComponent.tsx'
+
 import FleetManagement from './features/Fleet/Fleet.tsx'
 import TicketsTable from './features/customer Tickets/tickets.tsx'
 import  Payments from './features/Payments/payment.tsx'
@@ -29,13 +29,30 @@ import Notifications from './Components/Notifications.tsx'
 import BookingForm from './Components/BookingForm.tsx'
 import Settings from './Components/Settings.tsx'
 import EasySteps from './Components/Steps to follow.tsx'
-import Cloud from './Components/Cloudinary/cloudinary.tsx'  // import the Cloud component
+import {Cloud} from './Components/Cloudinary/cloudinary.tsx'  // import the Cloud component
 import AppCloud from './Components/Cloudinary/AppCloud.tsx'
 import UserDetails from './features/Users/singleUserComponent.tsx'
+import VehiclesList from './features/Vehicles/Vehicles.tsx'
+import FAQComponent from './Components/FAQ.tsx'
+import TermsConditionsComponent from './Components/terms&conditions.tsx'
+import BestPriceGuarantee from './Components/bestPricesguarantee.tsx'
+import Services from './Components/Services.tsx'
+import BookingDetails from './features/Bookings/BookingsDetails.tsx'
+import UserProfile from './features/Users/userById.tsx'
+import UserBookings from './features/Bookings/MyBookings Summary.tsx'
+import SingleBookingDetails from './features/Bookings/SingleBookingsSummary.tsx'
+import PaymentSuccess from './Components/PaymentsWithStripe/PaymentSuccessComponent.tsx'
+import PaymentCancel from './Components/PaymentsWithStripe/PaymentCancel.tsx'
+import SingleUserTickets from './features/customer Tickets/SingleUserTicket.tsx'
+import CarouselComponent from './Components/Carousell.tsx'
+import AdminDashboard from './Components/Admin dashboard/AdminDashboard.tsx'
+// import { AuthProvider } from './features/Login/AuthContex.tsx'
+
 
 
 const App = () => {
 const router = createBrowserRouter([
+  
   {
     path: '/',
     element: <Home />,
@@ -52,16 +69,8 @@ const router = createBrowserRouter([
     element: <Testimonials />,
     errorElement:<Error/>,
   },
-  {
-    path: 'cloudinary',
-    element: <Cloud />,
-    errorElement:<Error/>,
-  },
-  {
-    path: 'cloudinaryform',
-    element: <AppCloud />,
-    errorElement:<Error/>,
-  },
+  
+  
   {
     path: 'users/:user_id',
     element: <UserDetails />,
@@ -72,11 +81,13 @@ const router = createBrowserRouter([
     element: <ToastContainer />,
     errorElement:<Error/>,
   },
+  
   {
-    path: 'bookings',
-    element: < Bookings />,
+    path: 'bookings/:id',
+    element: < BookingDetails />,
     errorElement:<Error/>,
   },
+  
   {
     path: 'steps',
     element: < EasySteps />,
@@ -97,47 +108,38 @@ const router = createBrowserRouter([
     element: < Settings />,
     errorElement:<Error/>,
   },
+  
   {
-    path: 'ticket',
-    element: < TicketsTable />,
+    path: 'carousel',
     errorElement:<Error/>,
   },
   
+  
+  
   {
-    path: 'payments',
-    element: <  Payments />,
+    path: 'paymentsuccess',
+    element: <  PaymentSuccess />,
     errorElement:<Error/>,
   },
   {
-    path: 'vehiclesSpecifications',
-    element: < VehicleSpecifications />,
+    path: 'paymentcancel',
+    element: <  PaymentCancel />,
     errorElement:<Error/>,
   },
+  
   {
     path: 'vehicleslist',
     element: < VehicleSpecification />,
     errorElement:<Error/>,
   },
-  {
-    path: 'paymentStripe',
-    element: < CheckoutForm />,
-    errorElement:<Error/>,
-  },
-  {
-    path: 'fleetManagement',
-    element: < FleetManagement />,
-    errorElement:<Error/>,
-  },
+  
+  
   {
     path: 'login',
     element: <LoginUser />,
     errorElement:<Error/>,
   },
-  {
-    path: 'admin',
-    element: <Appi />,
-    errorElement:<Error/>,
-  },
+  
   {
     path: 'contact',
     element: <Contact />,
@@ -149,27 +151,129 @@ const router = createBrowserRouter([
     element: <About />,
     errorElement:<Error/>,
   },
+  
   {
-    path: "users",
-    element: <UsersList />,
+    path: 'faq',
+    element: <FAQComponent/>,
+    errorElement:<Error/>,
+  },
+  {
+    path: 'terms',
+    element: <TermsConditionsComponent/>,
+    errorElement:<Error/>,
+  },
+  {
+    path: 'bestPriceguarantee',
+    element: <BestPriceGuarantee/>,
+    errorElement:<Error/>,
+  },
+  {
+    path: 'services',
+    element: <Services/>,
+    errorElement:<Error/>,
+  },
+  
+  
+  
+  
+  {
+    path: 'admin',
+    element: <Appi />,
     errorElement:<Error/>,
     children: [
       {
-        path: "users/:id",
-        element: <UsersList />,
-      }
+        index: true,
+        element: <AdminDashboard />,
+        errorElement:<Error/>,
+      },
+      
+        {
+           path: "users",
+           element: <UsersList />,
+          errorElement:<Error/>,    
+        },
+        
+        {
+          path: 'vehicles',
+          element: < VehiclesList />,
+          errorElement:<Error/>,
+        },
+        {
+          path: 'vehiclesSpecifications',
+          element: < VehicleSpecifications />,
+          errorElement:<Error/>,
+        },
+        {
+          path: 'bookings',
+          element: < Bookings />,
+          errorElement:<Error/>,
+        },
+        {
+          path: 'bookingByUserId',
+          element: <UserBookings/>,
+          errorElement:<Error/>,
+        },
+        {
+          path: 'payments',
+          element: <  Payments />,
+          errorElement:<Error/>,
+        },
+        {
+          path: 'fleetManagement',
+          element: < FleetManagement />,
+          errorElement:<Error/>,
+        },
+        {
+          path: 'ticket',
+          element: < TicketsTable />,
+          errorElement:<Error/>,
+        },
+        {
+          path: 'cloudinaryform',
+          element: <AppCloud />,
+          errorElement:<Error/>,
+        },
+        {
+          path: 'cloudinary',
+          element: <Cloud />,
+          errorElement:<Error/>,
+        },
+        
+      
     ]
   },
+
+
   {
     path: 'dashboard',
     element: <Dashboard />,
     errorElement:<Error/>,
     children: [
+      {
+        index: true,  
+    element: < CarouselComponent />,
+
+      },
       
       {
         path: "user-profiles",
         element: <UserProfiles />,
-      }
+      },
+      {
+        path: 'usersById',
+        element: <UserProfile/>,
+        errorElement:<Error/>,
+      },
+      {
+        path: 'singleUserWithTickets',
+        element: < SingleUserTickets />,
+        errorElement:<Error/>,
+      },
+      {
+        path: 'singlebookingsummary',
+        element: <SingleBookingDetails bookingId={5} />,
+        errorElement:<Error/>,
+      },
     ]
   },
 

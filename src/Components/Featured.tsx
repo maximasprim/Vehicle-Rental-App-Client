@@ -4,76 +4,77 @@ import car3 from '../assets/car-3.jpg';
 import car4 from '../assets/car-4.jpg';
 import car5 from '../assets/car-5.jpg';
 import car6 from '../assets/car-6.jpg';
-import car7 from '../assets/car-7.jpg';
+import car7 from '../assets/car-8.jpg';
+import car8 from '../assets/car-10.jpg';
 // import car8 from '../assets/car-8.jpg';
 
 const products = [
     {
       id: 1,
-      name: 'Earthen Bottle',
-      href: '#',
-      price: '$48',
+      name: 'Mercedes Convertible',
+      href: '/vehicleslist',
+      price: 'Fee:  $48',
       
       imageSrc: car1,
-      imageAlt: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.',
+      imageAlt: 'Mercedes',
     },
     {
       id: 2,
-      name: 'Nomad Tumbler',
-      href: '#',
-      price: '$35',
+      name: 'Range Rover',
+      href: '/vehicleslist',
+      price: 'Fee:  $35',
       imageSrc: car2,
-      imageAlt: 'Olive drab green insulated bottle with flared screw lid and flat top.',
+      imageAlt: 'Range Rover',
     },
     {
       id: 3,
-      name: 'Focus Paper Refill',
-      href: '#',
-      price: '$89',
+      name: 'Maclaren',
+      href: '/vehicleslist',
+      price: 'Fee:  $89',
       imageSrc: car3,
-      imageAlt: 'Person using a pen to cross a task off a productivity paper card.',
+      imageAlt: 'MacLaren',
     },
     {
       id: 4,
-      name: 'Machined Mechanical Pencil',
-      href: '#',
-      price: '$35',
+      name: 'Ford Mustang',
+      href: '/vehicleslist',
+      price: 'Fee:  $35',
       imageSrc: car4,
-      imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
+      imageAlt: 'Ford Mustang',
     },
     {
       id: 1,
-      name: 'Earthen Bottle',
-      href: '#',
-      price: '$48',
+      name: 'BMW M4',
+      href: '/vehicleslist',
+      price: 'Fee:  $48',
       imageSrc: car5,
-      imageAlt: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.',
+      imageAlt: 'BMW',
     },
     {
       id: 2,
-      name: 'Nomad Tumbler',
-      href: '#',
-      price: '$35',
+      name: 'Aston Martin',
+      href: '/vehicleslist',
+      price: 'Fee:  $35',
       imageSrc: car6,
-      imageAlt: 'Olive drab green insulated bottle with flared screw lid and flat top.',
+      imageAlt: 'Aston martin',
     },
     {
       id: 3,
-      name: 'Focus Paper Refill',
-      href: '#',
-      price: '$89',
+      name: 'Jeep Wrangler',
+      href: '/vehicleslist',
+      price: 'Fee:  $89',
       imageSrc: car7,
       imageAlt: 'Person using a pen to cross a task off a productivity paper card.',
     },
     {
       id: 4,
-      name: 'Machined Mechanical Pencil',
-      href: '#',
-      price: '$35',
-      imageSrc: car7,
+      name: 'Mercedes gt86',
+      href: '/vehicleslist',
+      price: 'Fee:  $35',
+      imageSrc: car8,
       imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
     },
-    // More products...
+    
   ]
   
   export default function Featured() {
@@ -93,7 +94,7 @@ const products = [
                     className="h-40 w-full object-cover object-center group-hover:opacity-50"
                   />
                 </div>
-                <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
+                <h3 className="mt-6 text-sm text-gray-300">{product.name}</h3>
                 <p className="mt-1 text-lg font-medium text-gray-900">{product.price}</p>
                 <div className='flex justify-center'>
                 <button className="bg-green-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full justify-center">More Details</button>

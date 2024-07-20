@@ -74,7 +74,7 @@ const Payments: React.FC = () => {
           },
         }}
       />
-      <div className="overflow-x-auto bg-gray-800 text-white rounded-lg p-4">
+      <div className="overflow-x-auto bg-gray-800 text-white  p-4 h-screen overflow-y-auto">
         <h1 className="text-xl my-4">Payments</h1>
         <form onSubmit={handleCreate} className="mb-4">
           <div className="grid grid-cols-2 gap-4">

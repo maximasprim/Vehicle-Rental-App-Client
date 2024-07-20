@@ -55,7 +55,7 @@ const Tickets: React.FC = () => {
           },
         }}
       />
-      <div className="overflow-x-auto bg-gray-800 text-white rounded-lg p-4">
+      <div className="overflow-x-auto bg-gray-800 text-white  p-4 w-full h-screen overflow-y-auto">
         <h1 className="text-xl my-4">My Tickets</h1>
         <div className="mb-4">
           <input

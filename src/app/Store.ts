@@ -47,8 +47,8 @@ export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(usersApi.middleware).concat(registerApi.middleware).concat(authApi.middleware).concat(BookingsAPI.middleware)
-    .concat(vehiclesApi.middleware).concat(FleetManagementApi.middleware).concat(vehicleSpecificationApi.middleware).concat(TicketsAPI.middleware).concat(PaymentsApi.middleware)
-    ,
+    .concat(FleetManagementApi.middleware).concat(vehicleSpecificationApi.middleware).concat(TicketsAPI.middleware).concat(PaymentsApi.middleware)
+    .concat(vehiclesApi.middleware),
 }) as any;
 
 export const persistor = persistStore(store);

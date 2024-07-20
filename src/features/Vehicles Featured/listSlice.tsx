@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetVehicleSpecificationsQuery } from '../VehiclesSpecifications/vSpecificationsApi';
 import { Toaster } from 'sonner';
+import { images } from '../../Components/Cloudinary/cloudinary';
 
 export interface TVehicleSpecification {
   vehicleSpec_id: number;
@@ -35,6 +36,13 @@ const VehicleSpecifications: React.FC = () => {
     setSelectedSpec(null);
   };
 
+  const getImageForSpec = (model: string) => {
+    const imageName = model.toLowerCase();
+    const image = images.find(img => img.id.toLowerCase() === imageName);
+    return image ? `https://res.cloudinary.com/dcwglllgt/image/upload/${image.id}.jpg` :
+      `https://via.placeholder.com/300x200?text=${encodeURIComponent(model)}`;
+  };
+
   return (
     <>
       <Toaster
@@ -57,13 +65,13 @@ const VehicleSpecifications: React.FC = () => {
         ) : selectedSpec ? (
           <div className="bg-gray-700 p-6 rounded-lg shadow-lg">
             <button
-  onClick={handleBackToList}
-  className="mb-4 px-4 py-2 bg-orange-500 text-white font-semibold rounded shadow hover:bg-blue-600 transition duration-300"
->
-  Back to List
-</button>
+              onClick={handleBackToList}
+              className="mb-4 px-4 py-2 bg-orange-500 text-white font-semibold rounded shadow hover:bg-blue-600 transition duration-300"
+            >
+              Back to List
+            </button>
             <img
-              src={`https://via.placeholder.com/300x200?text=${selectedSpec.manufacturer} ${selectedSpec.model}`}
+              src={getImageForSpec(selectedSpec.model)}
               alt={`${selectedSpec.manufacturer} ${selectedSpec.model}`}
               className="w-full h-96 object-cover mb-4 rounded transition-transform duration-300 ease-in-out"
             />
@@ -121,7 +129,7 @@ const VehicleSpecifications: React.FC = () => {
                   onClick={() => handleCardClick(spec)}
                 >
                   <img
-                    src={`https://via.placeholder.com/300x200?text=${spec.manufacturer} ${spec.model}`}
+                    src={getImageForSpec(spec.model)}
                     alt={`${spec.manufacturer} ${spec.model}`}
                     className="w-full h-48 object-cover mb-4 rounded transition-transform duration-300 ease-in-out"
                   />

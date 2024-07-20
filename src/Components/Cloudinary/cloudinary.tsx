@@ -1,21 +1,21 @@
-// import React from 'react'
-// import React from 'react';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { auto } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
 import { AdvancedImage } from '@cloudinary/react';
-import { Link } from 'react-router-dom'; // or 'next/link' if using Next.js
+import { Link } from 'react-router-dom';
+
+const images = [
+  { id: 'bugati', route: '/sample1' },
+  { id: 'bugati 2', route: '/sample2' },
+  { id: 'bugati 3', route: '/sample3' },
+  { id: 'teana', route: '/sample4' },
+  { id: 'huracan', route: '/sample5' },
+  { id: 'cayenne', route: '/sample6' },
+  
+];
 
 const Cloud = () => {
   const cld = new Cloudinary({ cloud: { cloudName: 'dcwglllgt' } });
-
-  // Array of images with their respective routes
-  const images = [
-    { id: 'bugati', route: '/sample1' },
-    { id: 'bugati 2', route: '/sample2' },
-    { id: 'bugati 3', route: '/sample3' },
-    // Add more images and routes as needed
-  ];
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -36,4 +36,4 @@ const Cloud = () => {
   );
 };
 
-export default Cloud;
+export { Cloud, images };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useCreateBookingsMutation } from '../features/Bookings/BookingApi';
 import { Toaster, toast } from 'sonner';
+import { useNavigate } from 'react-router-dom'
 
 const BookingForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +21,10 @@ const BookingForm: React.FC = () => {
       [e.target.name]: e.target.value,
     });
   };
-
+  const navigate = useNavigate();
+  const handlePaymentsClick = () => {
+    navigate('/singlebookingsummary'); // Replace '/payments' with the actual route you want to navigate to
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -128,6 +132,11 @@ const BookingForm: React.FC = () => {
           </button>
         </div>
       </form>
+      <div className='flex gap-6 mb-8'>
+      <button className='bg-blue-500 hover:bg-orange-500 text-white p-2 rounded mb-8' onClick={handlePaymentsClick}>
+      Go to Pay
+    </button>
+    </div>
     </div>
   );
 };

@@ -86,10 +86,10 @@ const UsersList: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 bg-gray-800 ">
       <h1 className="text-2xl font-bold mb-4">Users List</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 ">
         <input
           type="text"
           name="full_name"

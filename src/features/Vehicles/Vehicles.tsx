@@ -1,34 +1,45 @@
-// src/features/vehicles/Vehicles.tsx
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../../app/Store';
-import { fetchVehicles, updateVehicle as updateVehicleLocal, deleteVehicle as deleteVehicleLocal } from './VehiclesSlice';
-import { useAddVehicleMutation, useUpdateVehicleMutation, useDeleteVehicleMutation } from './VehiclesApi';
-import { Vehicle } from './VehiclesApi';
+import { 
+  useFetchVehiclesQuery, 
+  useFetchVehicleByIdQuery, 
+  useAddVehicleMutation, 
+  useUpdateVehicleMutation, 
+  useDeleteVehicleMutation 
+} from './VehiclesApi'
 
 const VehiclesList: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const vehicles = useSelector((state: RootState) => state.vehicles.vehicles);
-  const loading = useSelector((state: RootState) => state.vehicles.loading);
-  const error = useSelector((state: RootState) => state.vehicles.error);
-
-  const initialVehicleState = { id: 0, make: '', model: '', year: 0, registrationNumber: '', status: 'available' };
-  const [newVehicle, setNewVehicle] = useState<Partial<Vehicle>>(initialVehicleState);
+  const { data: vehicles = [], isLoading, error, refetch } = useFetchVehiclesQuery();
   const [addVehicle] = useAddVehicleMutation();
-  const [editMode, setEditMode] = useState(false);
   const [updateVehicle] = useUpdateVehicleMutation();
   const [deleteVehicle] = useDeleteVehicleMutation();
+  const [selectedVehicleId, setSelectedVehicleId] = useState<number | null>(null);
+  const { data: selectedVehicle, error: vehicleError, isLoading: vehicleLoading } = useFetchVehicleByIdQuery(selectedVehicleId!, {
+    skip: selectedVehicleId === null, // Skip the query if no vehicle is selected
+  });
+
+  const initialVehicleState = { vehicle_id: 0, rental_rent: 0, availability: 'available' };
+  const [newVehicle, setNewVehicle] = useState(initialVehicleState);
+  const [editMode, setEditMode] = useState(false);
+
+  // Function to refetch vehicles from API and update local storage
+  const fetchVehiclesAndUpdateStorage = async () => {
+    try {
+      await refetch();
+      localStorage.setItem('vehicles', JSON.stringify(vehicles));
+    } catch (error) {
+      console.error('Failed to refetch vehicles:', error);
+    }
+  };
 
   useEffect(() => {
-    dispatch(fetchVehicles());
-  }, [dispatch]);
+    fetchVehiclesAndUpdateStorage();
+  }, []); // Fetch vehicles on component mount
 
   const handleAddVehicle = async () => {
     try {
-      console.log("Adding vehicle:", newVehicle);
       await addVehicle(newVehicle).unwrap();
-      dispatch(fetchVehicles());
       setNewVehicle(initialVehicleState); // Reset the form after adding vehicle
+      fetchVehiclesAndUpdateStorage(); // Fetch vehicles after adding new vehicle
     } catch (err) {
       console.error('Failed to add vehicle:', err);
     }
@@ -41,102 +52,117 @@ const VehiclesList: React.FC = () => {
 
   const handleUpdateVehicle = async () => {
     try {
-      if (!newVehicle.id) {
+      if (!newVehicle.vehicle_id) {
         console.error('No vehicle ID found for update.');
         return;
       }
-      console.log("Updating vehicle:", newVehicle);
-      const updatedVehicle = await updateVehicle(newVehicle).unwrap();
-      dispatch(updateVehicleLocal(updatedVehicle));
+      await updateVehicle(newVehicle).unwrap();
       setNewVehicle(initialVehicleState);
       setEditMode(false);
-      console.log("Vehicle updated successfully:", updatedVehicle);
+      fetchVehiclesAndUpdateStorage(); // Fetch vehicles after updating vehicle
     } catch (error) {
       console.error('Failed to update vehicle:', error);
     }
   };
 
-  const handleEditVehicle = (vehicle: Vehicle) => {
-    console.log("Editing vehicle:", vehicle);
+  const handleEditVehicle = (vehicle: any) => {
     setNewVehicle(vehicle);
     setEditMode(true);
   };
-  
 
   const handleDeleteVehicle = async (id: number) => {
     try {
-      console.log("Deleting vehicle with ID:", id);
       await deleteVehicle(id).unwrap();
-      dispatch(deleteVehicleLocal(id));
-    } catch (err) {
-      console.error('Failed to delete vehicle:', err);
+      fetchVehiclesAndUpdateStorage(); // Fetch vehicles after deleting vehicle
+    } catch (error) {
+      console.error('Failed to delete vehicle', error);
     }
   };
 
-  if (loading) {
+  const handleViewVehicle = (id: number) => {
+    setSelectedVehicleId(id);
+  };
+
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Error: {error.message}</div>;
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 bg-gray-800">
       <h1 className="text-2xl font-bold mb-4">Vehicles List</h1>
-      <div className="mb-4">
-        <h2 className="text-xl font-bold">{editMode ? 'Edit Vehicle' : 'Add Vehicle'}</h2>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <input
-          type="text"
-          name="rental_rate"
-          value={newVehicle.rental_rate}
+          type="number"
+          name="rental_rent"
+          placeholder="Rental Rent"
+          value={newVehicle.rental_rent}
           onChange={handleInputChange}
-          placeholder="Rental Rate"
-          className="mr-2 p-2 border border-gray-300 rounded"
+          className="input input-bordered w-full mb-2"
         />
-        
-        
         <select
-          name="status"
-          value={newVehicle.availability ? "available" : "unavailable"}
+          name="availability"
+          value={newVehicle.availability}
           onChange={handleInputChange}
-          className="mr-2 p-2 border border-gray-300 rounded"
+          className="input input-bordered w-full mb-2"
         >
-          <option value="available">true</option>
-          <option value="unavailable">false</option>
+          <option value="available">Available</option>
+          <option value="unavailable">Unavailable</option>
         </select>
-        <button
-          onClick={editMode ? handleUpdateVehicle : handleAddVehicle}
-          className="p-2 bg-blue-500 text-white rounded"
-        >
-          {editMode ? 'Update' : 'Add'}
-        </button>
-      </div>
 
+        {editMode ? (
+          <button onClick={handleUpdateVehicle} className="btn btn-primary w-full">Update Vehicle</button>
+        ) : (
+          <button onClick={handleAddVehicle} className="btn btn-primary w-full">Add Vehicle</button>
+        )}
+      </div>
+      
       <table className="table-auto w-full">
         <thead>
           <tr>
             <th>#</th>
-            <th>Rental_rate</th>
-            
-            <th>Status</th>
+            <th>Rental Rent</th>
+            <th>Availability</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {vehicles.map((vehicle, index) => (
-            <tr key={vehicle.id}>
+          {vehicles.map((vehicle:any, index:any) => (
+            <tr key={vehicle.vehicle_id}>
               <td>{index + 1}</td>
-              <td>{vehicle.rental_rate}</td>
+              <td>{vehicle.rental_rent}</td>
               <td>{vehicle.availability}</td>
               <td>
-                <button onClick={() => handleEditVehicle(vehicle)} className="mr-2 p-2 bg-yellow-500 text-white rounded">Edit</button>
-                <button onClick={() => handleDeleteVehicle(vehicle.id)} className="p-2 bg-red-500 text-white rounded">Delete</button>
+                <button onClick={() => handleEditVehicle(vehicle)} className="btn btn-sm btn-warning mr-2">Edit</button>
+                <button onClick={() => handleDeleteVehicle(vehicle.vehicle_id)} className="btn btn-sm btn-danger">Delete</button>
+                <button onClick={() => handleViewVehicle(vehicle.vehicle_id)} className="btn btn-sm btn-info ml-2">View</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {selectedVehicleId !== null && selectedVehicle && (
+        <div className="mt-4">
+          <h2 className="text-xl font-bold mb-2">Vehicle Details</h2>
+          {vehicleLoading ? (
+            <div>Loading vehicle details...</div>
+          ) : vehicleError ? (
+            <div>Error loading vehicle details: {vehicleError.message}</div>
+          ) : (
+            <div>
+              <p><strong>ID:</strong> {selectedVehicle.vehicle_id}</p>
+              <p><strong>Rental Rent:</strong> {selectedVehicle.rental_rent}</p>
+              <p><strong>Availability:</strong> {selectedVehicle.availability}</p>
+              <button onClick={() => setSelectedVehicleId(null)} className="btn btn-sm btn-secondary mt-2">Close</button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

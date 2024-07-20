@@ -1,7 +1,15 @@
+// src/features/Booking/Bookings.tsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useGetBookingsQuery, useDeleteBookingsMutation, useUpdateBookingsMutation } from './BookingApi';
 import { Toaster, toast } from 'sonner';
 import BookingForm from '../../Components/BookingForm';
+import { useCreatePaymentsMutation } from '../../Components/PaymentsWithStripe/stripeApi';
+import { TBookedVehicles } from '../Bookings/BookingApi';
+ 
+
+
+// import Bookings from './Booking';
 
 export interface TBookings {
   booking_id: number;
@@ -20,6 +28,7 @@ const Bookings: React.FC = () => {
   const { data, isLoading } = useGetBookingsQuery();
   const [updateBooking] = useUpdateBookingsMutation();
   const [deleteBooking, { data: deleteMsg }] = useDeleteBookingsMutation();
+  const [createCheckout] = useCreatePaymentsMutation();
 
   const handleUpdate = (booking_id: number) => {
     const updateBookingData = {
@@ -32,6 +41,22 @@ const Bookings: React.FC = () => {
     await deleteBooking(booking_id);
     toast.success(deleteMsg?.msg || 'Booking deleted successfully');
   };
+//payment with stripe
+  const handleUpdatePay = async (booking: TBookedVehicles) => {
+    try {
+      const { data } = await createCheckout({ booking_id: booking.booking_id, amount: Number(booking.total_amount) });
+      if (data?.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        console.error('Checkout url is not given');
+        toast.error('provide checkout url');
+      }
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      toast.error('Error creating checkout session');
+    }
+  };
+
 
   return (
     <>
@@ -45,7 +70,7 @@ const Bookings: React.FC = () => {
           },
         }}
       />
-      <div className="overflow-x-auto bg-gray-800 text-white rounded-lg p-4">
+      <div className="overflow-x-auto bg-gray-800 text-white  p-4 h-screen overflow-y-auto">
         <h1 className="text-xl my-4">My Bookings</h1>
         <BookingForm />
         <table className="table table-xs">
@@ -83,7 +108,12 @@ const Bookings: React.FC = () => {
                     <td className="flex gap-2">
                       <button className="btn btn-sm btn-outline btn-info" onClick={() => handleUpdate(bookings.booking_id)}>Update</button>
                       <button className="btn btn-sm btn-outline btn-warning" onClick={() => handleDelete(bookings.booking_id)}>Delete</button>
+                      <Link to={`/bookings/${bookings.booking_id}`} className="btn btn-sm btn-outline btn-primary">View</Link>
                     </td>
+                    <td>  <button className="btn btn-sm btn-outline btn-info" onClick={() => handleUpdatePay(bookings)}>
+                      Pay
+                    </button>
+</td>
                   </tr>
                 ))
               

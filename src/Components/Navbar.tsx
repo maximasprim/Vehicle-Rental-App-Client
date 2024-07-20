@@ -16,7 +16,7 @@ function classNames(...classes: string[]) {
 
 export default function Example() {
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="bg-gray-900">
       
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
@@ -91,12 +91,12 @@ export default function Example() {
                   </a>
                 </MenuItem>
                 <MenuItem>
-                  <a href="/paymentStripe" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                  <a href="/mycomponent" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                     payment
                   </a>
                 </MenuItem>
                 <MenuItem>
-                  <a href="admin" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                  <a href="login" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                     Admin Login
                   </a>
                 </MenuItem>

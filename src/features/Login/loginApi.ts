@@ -4,7 +4,7 @@ import { setCredentials, setError } from './loginSlice';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://vehicle-renting-service-api.onrender.com/' }),
   endpoints: (builder) => ({
     loginUser: builder.mutation<any, { username: string; password: string }>({
       query: (credentials) => ({

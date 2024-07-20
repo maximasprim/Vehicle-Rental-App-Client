@@ -5,9 +5,11 @@ import { useLoginUserMutation } from './loginApi';
 import { setCredentials } from './loginSlice';
 import { Facebook,Twitter } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 const LoginUser: React.FC = () => {
   const [username, setUsername] = useState('');
+  const [role] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState<string | null>(null);
   const dispatch = useDispatch();
@@ -17,12 +19,15 @@ const LoginUser: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const userData = await loginUser({ username, password }).unwrap();
+      const userData = await loginUser({ username, password,role }).unwrap();
       dispatch(setCredentials(userData));
       setMessage('Login successful!');
       console.log('Login successful:', userData)
+      const token = userData.token;
+      const decoded= jwtDecode(token);
+      console.log('Decoded token:', decoded);
        // Navigate based on the role
-       if (userData.role === 'admin') {
+       if (decoded.role === 'admin') {
         navigate('/admin');
       } else {
         navigate('/dashboard');

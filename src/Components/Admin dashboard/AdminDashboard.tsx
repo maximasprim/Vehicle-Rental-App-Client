@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Dashboard: React.FC = () => {
+const AdminDashboard: React.FC = () => {
   return (
-    <div className="flex-1 p-6">
+    <div className="flex-1 p-6 h-screen overflow-y-auto">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-semibold">Today's Statistics</h1>
@@ -122,4 +122,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;

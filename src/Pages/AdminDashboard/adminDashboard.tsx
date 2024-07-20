@@ -1,8 +1,9 @@
 import React from 'react';
 import Sidebar from './adminSidebar'
-import Dashboard from '../../Components/Admin dashboard/AdminDashboard';
+// import Dashboard from '../../Components/Admin dashboard/AdminDashboard';
 import Navbar from '../../Components/Navbar';
 import Footer from '../../Components/Footer';
+import { Outlet } from 'react-router-dom';
 
 const Appi: React.FC = () => {
   return (
@@ -11,7 +12,8 @@ const Appi: React.FC = () => {
     <div className="flex min-h-screen bg-gray-100">
       
       <Sidebar />
-      <Dashboard />
+      {/* <Dashboard /> */}
+      <Outlet />
     </div>
     <Footer />
     </>

@@ -15,7 +15,7 @@ export interface TFleet {
 export const FleetManagementApi = createApi({
   reducerPath: 'fleetManagementApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'https://vehicle-renting-service-api.onrender.com/',
     prepareHeaders: (headers) => {
       const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
       const token = userDetails?.token;
@@ -28,12 +28,12 @@ export const FleetManagementApi = createApi({
   tagTypes: ['Fleet'],
   endpoints: (builder) => ({
     getFleets: builder.query<TFleet[], void>({
-      query: () => 'fleets',
+      query: () => 'fleetManagement',
       providesTags: ['Fleet'],
     }),
     createFleet: builder.mutation<TFleet, Partial<TFleet>>({
       query: (newFleet) => ({
-        url: 'fleets',
+        url: 'fleetManagement',
         method: 'POST',
         body: newFleet,
       }),
@@ -41,7 +41,7 @@ export const FleetManagementApi = createApi({
     }),
     updateFleet: builder.mutation<TFleet, Partial<TFleet>>({
       query: ({ fleet_id, ...rest }) => ({
-        url: `fleets/${fleet_id}`,
+        url: `fleetManagement/${fleet_id}`,
         method: 'PUT',
         body: rest,
       }),
@@ -49,7 +49,7 @@ export const FleetManagementApi = createApi({
     }),
     deleteFleet: builder.mutation<{ success: boolean; fleet_id: number }, number>({
       query: (fleet_id) => ({
-        url: `fleets/${fleet_id}`,
+        url: `fleetManagement/${fleet_id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Fleet'],

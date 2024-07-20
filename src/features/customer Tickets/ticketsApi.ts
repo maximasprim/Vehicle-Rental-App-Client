@@ -15,7 +15,7 @@ export interface Ticket {
 export const TicketsAPI = createApi({
   reducerPath: 'ticketsAPI',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'https://vehicle-renting-service-api.onrender.com/',
     prepareHeaders: (headers) => {
       const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
       const token = userDetails?.token;

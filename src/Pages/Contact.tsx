@@ -1,23 +1,6 @@
 import Navbar from "../Components/Navbar";
-// import React from 'react'
-// import { Menu, X, MapPin } from 'lucide-react'
-// import { useState } from 'react'
 import Footer from "../Components/Footer";
 
-// const menuItems = [
-//     {
-//         name: 'Home',
-//         href: '#',
-//     },
-//     {
-//         name: 'About',
-//         href: '#',
-//     },
-//     {
-//         name: 'Contact',
-//         href: '#',
-//     },
-// ]
 
 export default function Contact() {
     // const [isMenuOpen, setIsMenuOpen] = useState(false)

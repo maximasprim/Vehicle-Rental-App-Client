@@ -22,7 +22,7 @@ export interface TVehicleSpecification {
 export const vehicleSpecificationApi = createApi({
   reducerPath: 'vehicleSpecificationApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'https://vehicle-renting-service-api.onrender.com/',
     prepareHeaders: (headers) => {
       const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
       const token = userDetails?.token;

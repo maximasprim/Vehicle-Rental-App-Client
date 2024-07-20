@@ -1,8 +1,8 @@
-// src/features/vehicles/vehiclesSlice.ts
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { Vehicle } from './VehiclesApi';
+import { vehiclesApi } from './VehiclesApi';
 
-export interface VehiclesState {
+interface VehiclesState {
   vehicles: Vehicle[];
   loading: boolean;
   error: string | null;
@@ -14,110 +14,60 @@ const initialState: VehiclesState = {
   error: null,
 };
 
-// Async thunk to fetch vehicles
-export const fetchVehicles: any = createAsyncThunk('vehicles/fetchVehicles', async () => {
-  const response = await fetch('http://localhost:3000/vehicles'); // Adjust the URL as needed
-  if (!response.ok) {
-    throw new Error('Failed to fetch vehicles');
-  }
-  return (await response.json()) as Vehicle[];
-});
-
-// Async thunk to add a vehicle
-export const addVehicle: any = createAsyncThunk('vehicles/addVehicle', async (vehicle: Partial<Vehicle>) => {
-  const response = await fetch('http://localhost:3000/vehicles', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(vehicle),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to add vehicle');
-  }
-  return (await response.json()) as Vehicle;
-});
-
-// Async thunk to update a vehicle
-export const updateVehicle: any = createAsyncThunk('vehicles/updateVehicle', async ({ id, ...vehicle }: Partial<Vehicle>) => {
-  const response = await fetch(`http://localhost:3000/vehicles/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(vehicle),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to update vehicle');
-  }
-  return (await response.json()) as Vehicle;
-});
-
-// Async thunk to delete a vehicle
-export const deleteVehicle: any = createAsyncThunk('vehicles/deleteVehicle', async (id: number) => {
-  const response = await fetch(`http://localhost:3000/vehicles/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Failed to delete vehicle');
-  }
-  return id;
-});
-
 const vehiclesSlice = createSlice({
   name: 'vehicles',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchVehicles.pending, (state) => {
+      .addMatcher(vehiclesApi.endpoints.fetchVehicles.matchPending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchVehicles.fulfilled, (state, action: PayloadAction<Vehicle[]>) => {
+      .addMatcher(vehiclesApi.endpoints.fetchVehicles.matchFulfilled, (state, action) => {
         state.loading = false;
         state.vehicles = action.payload;
       })
-      .addCase(fetchVehicles.rejected, (state, action) => {
+      .addMatcher(vehiclesApi.endpoints.fetchVehicles.matchRejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch vehicles';
       })
-      .addCase(addVehicle.pending, (state) => {
+      .addMatcher(vehiclesApi.endpoints.addVehicle.matchPending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(addVehicle.fulfilled, (state, action: PayloadAction<Vehicle>) => {
+      .addMatcher(vehiclesApi.endpoints.addVehicle.matchFulfilled, (state, action) => {
         state.loading = false;
         state.vehicles.push(action.payload);
       })
-      .addCase(addVehicle.rejected, (state, action) => {
+      .addMatcher(vehiclesApi.endpoints.addVehicle.matchRejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to add vehicle';
       })
-      .addCase(updateVehicle.pending, (state) => {
+      .addMatcher(vehiclesApi.endpoints.updateVehicle.matchPending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateVehicle.fulfilled, (state, action: PayloadAction<Vehicle>) => {
+      .addMatcher(vehiclesApi.endpoints.updateVehicle.matchFulfilled, (state, action) => {
         state.loading = false;
-        const index = state.vehicles.findIndex((vehicle) => vehicle.id === action.payload.id);
+        const index = state.vehicles.findIndex((vehicle) => vehicle.vehicle_id === action.payload.vehicle_id);
         if (index !== -1) {
           state.vehicles[index] = action.payload;
         }
       })
-      .addCase(updateVehicle.rejected, (state, action) => {
+      .addMatcher(vehiclesApi.endpoints.updateVehicle.matchRejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to update vehicle';
       })
-      .addCase(deleteVehicle.pending, (state) => {
+      .addMatcher(vehiclesApi.endpoints.deleteVehicle.matchPending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteVehicle.fulfilled, (state, action: PayloadAction<number>) => {
+      .addMatcher(vehiclesApi.endpoints.deleteVehicle.matchFulfilled, (state, action) => {
         state.loading = false;
-        state.vehicles = state.vehicles.filter((vehicle) => vehicle.id !== action.payload);
+        state.vehicles = state.vehicles.filter((vehicle) => vehicle.vehicle_id !== action.payload.id);
       })
-      .addCase(deleteVehicle.rejected, (state, action) => {
+      .addMatcher(vehiclesApi.endpoints.deleteVehicle.matchRejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to delete vehicle';
       });

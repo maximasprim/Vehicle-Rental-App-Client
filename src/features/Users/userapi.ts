@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../../app/Store'; // Adjust the import according to your project structure
+import { Ticket } from '../customer Tickets/SingleUserTicket'; // Adjust the import according to your project structure
 
 export interface User {
   user_id: number;
@@ -10,12 +11,27 @@ export interface User {
   role: string;
   created_at: string;
   updated_at: string;
+  supportTickets: Ticket;
+  bookings?: TBookedVehicles[];
+}
+
+export interface TBookedVehicles {
+  booking_id: number;
+  user_id: number;
+  vehicle_id: number;
+  location_id: number;
+  booking_date: string;
+  return_date: string;
+  total_amount: number;
+  booking_status: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'https://vehicle-renting-service-api.onrender.com/',
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       console.log('Token:', token);
@@ -37,6 +53,24 @@ export const usersApi = createApi({
         url: `users/${user_id}`,
         method: 'GET',
       }),
+    }),
+    fetchUserWithBookings: builder.query<User, number>({
+      query: (user_id) => {
+        console.log(`Fetching user with bookings for user_id: ${user_id}`);
+        return {
+          url: `users/withBookings/${user_id}`,
+          method: 'GET',
+        };
+      },
+    }),
+    fetchUserWithTickets: builder.query<User, number>({
+      query: (user_id) => {
+        console.log(`Fetching user with bookings for user_id: ${user_id}`);
+        return {
+          url: `users/singleUserWithTickets/${user_id}`,
+          method: 'GET',
+        };
+      },
     }),
     addUser: builder.mutation<User, Partial<User>>({
       query: (user) => ({
@@ -63,7 +97,9 @@ export const usersApi = createApi({
 
 export const { 
   useFetchUsersQuery, 
-  useFetchUserByIdQuery, // Add this line
+  useFetchUserByIdQuery,
+  useFetchUserWithTicketsQuery,
+  useFetchUserWithBookingsQuery,
   useAddUserMutation, 
   useUpdateUserMutation, 
   useDeleteUserMutation 

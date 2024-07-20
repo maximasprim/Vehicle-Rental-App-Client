@@ -1,19 +1,20 @@
-// src/features/vehicles/vehiclesApi.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-
 export interface Vehicle {
-    id: number;
-    rental_rate: string;
-    availability: boolean;
-  }
+  vehicle_id: number;
+  rental_rent: number;
+  availability: string;
+}
 
 export const vehiclesApi = createApi({
   reducerPath: 'vehiclesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }), // Adjust baseUrl as per your API endpoint
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://vehicle-renting-service-api.onrender.com/' }),
   endpoints: (builder) => ({
     fetchVehicles: builder.query<Vehicle[], void>({
-      query: () => 'vehicles', // Replace 'vehicles' with your actual API endpoint for fetching vehicles
+      query: () => 'vehicles',
+    }),
+    fetchVehicleById: builder.query<Vehicle, number>({
+      query: (id) => `vehicles/${id}`,
     }),
     addVehicle: builder.mutation<Vehicle, Partial<Vehicle>>({
       query: (vehicle) => ({
@@ -23,10 +24,10 @@ export const vehiclesApi = createApi({
       }),
     }),
     updateVehicle: builder.mutation<Vehicle, Partial<Vehicle>>({
-      query: ({ id, ...vehicle }) => ({
-        url: `vehicles/${id}`,
-        method: 'PUT',
-        body: vehicle,
+      query: ({ vehicle_id, ...patch }) => ({
+        url: `vehicles/${vehicle_id}`,
+        method: 'PATCH',
+        body: patch,
       }),
     }),
     deleteVehicle: builder.mutation<{ success: boolean; id: number }, number>({
@@ -38,9 +39,10 @@ export const vehiclesApi = createApi({
   }),
 });
 
-export const useFetchVehiclesQuery: typeof vehiclesApi.useFetchVehiclesQuery = vehiclesApi.useFetchVehiclesQuery;
-export const useAddVehicleMutation: typeof vehiclesApi.useAddVehicleMutation = vehiclesApi.useAddVehicleMutation;
-export const useUpdateVehicleMutation: typeof vehiclesApi.useUpdateVehicleMutation = vehiclesApi.useUpdateVehicleMutation;
-export const useDeleteVehicleMutation: typeof vehiclesApi.useDeleteVehicleMutation = vehiclesApi.useDeleteVehicleMutation;
-
-export default vehiclesApi;
+export const { 
+  useFetchVehiclesQuery, 
+  useFetchVehicleByIdQuery, 
+  useAddVehicleMutation, 
+  useUpdateVehicleMutation, 
+  useDeleteVehicleMutation 
+}:any = vehiclesApi;

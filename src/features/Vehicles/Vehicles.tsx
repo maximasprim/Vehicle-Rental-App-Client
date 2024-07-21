@@ -17,7 +17,7 @@ const VehiclesList: React.FC = () => {
     skip: selectedVehicleId === null, // Skip the query if no vehicle is selected
   });
 
-  const initialVehicleState = { vehicle_id: 0, rental_rent: 0, availability: 'available' };
+  const initialVehicleState = { vehicle_id: 0, rental_rate: 0, availability: 'true' };
   const [newVehicle, setNewVehicle] = useState(initialVehicleState);
   const [editMode, setEditMode] = useState(false);
 
@@ -98,9 +98,9 @@ const VehiclesList: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <input
           type="number"
-          name="rental_rent"
-          placeholder="Rental Rent"
-          value={newVehicle.rental_rent}
+          name="rental_rate"
+          placeholder="Rental Rate"
+          value={newVehicle.rental_rate}
           onChange={handleInputChange}
           className="input input-bordered w-full mb-2"
         />
@@ -110,8 +110,8 @@ const VehiclesList: React.FC = () => {
           onChange={handleInputChange}
           className="input input-bordered w-full mb-2"
         >
-          <option value="available">Available</option>
-          <option value="unavailable">Unavailable</option>
+          <option value="TRUE">Available</option>
+          <option value="FALSE">Unavailable</option>
         </select>
 
         {editMode ? (
@@ -125,8 +125,11 @@ const VehiclesList: React.FC = () => {
         <thead>
           <tr>
             <th>#</th>
-            <th>Rental Rent</th>
+            <th>Rental Rate</th>
+            <th>Vehicle_ID</th>
             <th>Availability</th>
+            <th>created_at</th>
+            <th>updated_at</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -134,8 +137,11 @@ const VehiclesList: React.FC = () => {
           {vehicles.map((vehicle:any, index:any) => (
             <tr key={vehicle.vehicle_id}>
               <td>{index + 1}</td>
-              <td>{vehicle.rental_rent}</td>
+              <td>{vehicle.rental_rate}</td>
+              <td>{vehicle.vehicle_id}</td>
               <td>{vehicle.availability}</td>
+              <td>{vehicle.created_at}</td>
+              <td>{vehicle.updated_at}</td>
               <td>
                 <button onClick={() => handleEditVehicle(vehicle)} className="btn btn-sm btn-warning mr-2">Edit</button>
                 <button onClick={() => handleDeleteVehicle(vehicle.vehicle_id)} className="btn btn-sm btn-danger">Delete</button>
@@ -156,7 +162,7 @@ const VehiclesList: React.FC = () => {
           ) : (
             <div>
               <p><strong>ID:</strong> {selectedVehicle.vehicle_id}</p>
-              <p><strong>Rental Rent:</strong> {selectedVehicle.rental_rent}</p>
+              <p><strong>Rental Rent:</strong> {selectedVehicle.rental_rate}</p>
               <p><strong>Availability:</strong> {selectedVehicle.availability}</p>
               <button onClick={() => setSelectedVehicleId(null)} className="btn btn-sm btn-secondary mt-2">Close</button>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetVehicleSpecificationsQuery } from '../VehiclesSpecifications/vSpecificationsApi';
 import { Toaster, toast } from 'sonner';
@@ -19,7 +19,7 @@ export interface TVehicleSpecification {
 }
 
 const VehicleSpecifications: React.FC = () => {
-  const { data, error, isLoading } = useGetVehicleSpecificationsQuery();
+  const { data, error, isLoading,refetch } = useGetVehicleSpecificationsQuery();
   const navigate = useNavigate();
 
   const [selectedSpec, setSelectedSpec] = useState<null | TVehicleSpecification>(null);
@@ -33,6 +33,19 @@ const VehicleSpecifications: React.FC = () => {
       navigate('/login');
     }
   };
+
+  const fetchFetchFeaturedVehicles = async () => {
+    try {
+      await refetch();
+      localStorage.setItem('featuredVehicles', JSON.stringify(data));
+    } catch (error) {
+      console.error('Failed to refetch featured vehicles:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFetchFeaturedVehicles();
+  }, [data]);
 
   const handleCardClick = (spec: TVehicleSpecification) => {
     setSelectedSpec(spec);

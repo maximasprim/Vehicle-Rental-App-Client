@@ -46,6 +46,7 @@ import PaymentCancel from './Components/PaymentsWithStripe/PaymentCancel.tsx'
 import SingleUserTickets from './features/customer Tickets/SingleUserTicket.tsx'
 import CarouselComponent from './Components/Carousell.tsx'
 import AdminDashboard from './Components/Admin dashboard/AdminDashboard.tsx'
+import Locations from './features/Locations and Branches/location.tsx'
 // import { AuthProvider } from './features/Login/AuthContex.tsx'
 
 
@@ -190,6 +191,11 @@ const router = createBrowserRouter([
         {
            path: "users",
            element: <UsersList />,
+          errorElement:<Error/>,    
+        },
+        {
+           path: "locations",
+           element: <Locations />,
           errorElement:<Error/>,    
         },
         

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   useGetVehicleSpecificationsQuery,
   useCreateVehicleSpecificationMutation,
@@ -25,7 +25,7 @@ export interface TVehicleSpecification {
 }
 
 const VehicleSpecifications: React.FC = () => {
-  const { data, error, isLoading } = useGetVehicleSpecificationsQuery();
+  const { data, error, isLoading,refetch } = useGetVehicleSpecificationsQuery();
   const [createVehicleSpecification] = useCreateVehicleSpecificationMutation();
   const [updateVehicleSpecification] = useUpdateVehicleSpecificationMutation();
   const [deleteVehicleSpecification, { data: deleteMsg }] = useDeleteVehicleSpecificationMutation();
@@ -68,6 +68,19 @@ const VehicleSpecifications: React.FC = () => {
       features: '',
     });
   };
+
+  const fetchVSpecificationsAndUpdateStorage = async () => {
+    try {
+      await refetch();
+      localStorage.setItem('vehicleSpecifications', JSON.stringify(data));
+    } catch (error) {
+      console.error('Failed to refetch vehicle specifications:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchVSpecificationsAndUpdateStorage();
+  },[data]);
 
   const handleUpdate = (vehicleSpec_id: number) => {
     const updateVehicleData = {

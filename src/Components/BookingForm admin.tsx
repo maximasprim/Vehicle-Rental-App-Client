@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { useCreateBookingsMutation } from '../features/Bookings/BookingApi';
-import { Toaster, toast } from 'sonner';
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from "react";
+import { useCreateBookingsMutation } from "../features/Bookings/BookingApi";
+import { Toaster, toast } from "sonner";
 
-const BookingForm: React.FC = () => {
+
+const BookingFormAdmin: React.FC = () => {
   const [formData, setFormData] = useState({
-    user_id: '',
-    vehicle_id: '',
-    location_id: '',
-    booking_date: '',
-    return_date: '',
-    total_amount: '',
-    booking_status: '',
+    user_id: "",
+    vehicle_id: "",
+    location_id: "",
+    booking_date: "",
+    return_date: "",
+    total_amount: "",
+    booking_status: "",
   });
   const [createBooking, { isLoading }] = useCreateBookingsMutation();
 
@@ -21,27 +21,25 @@ const BookingForm: React.FC = () => {
       [e.target.name]: e.target.value,
     });
   };
-  const navigate = useNavigate();
-  const handlePaymentsClick = () => {
-    navigate('/dashboard/singlebookingsummary'); // Replace '/payments' with the actual route you want to navigate to
-  };
+  
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await createBooking(formData).unwrap();
-      toast.success('Booking created successfully!');
+      toast.success("Booking created successfully!");
       setFormData({
-        user_id: '',
-        vehicle_id: '',
-        location_id: '',
-        booking_date: '',
-        return_date: '',
-        total_amount: '',
-        booking_status: '',
+        user_id: "",
+        vehicle_id: "",
+        location_id: "",
+        booking_date: "",
+        return_date: "",
+        total_amount: "",
+        booking_status: "",
       });
     } catch (error) {
-      toast.error('Failed to create booking!');
-      console.error('Failed to create booking:', error);
+      toast.error("Failed to create booking!");
+      console.error("Failed to create booking:", error);
     }
   };
 
@@ -50,15 +48,18 @@ const BookingForm: React.FC = () => {
       <Toaster
         toastOptions={{
           classNames: {
-            error: 'bg-red-400',
-            success: 'text-green-400',
-            warning: 'text-yellow-400',
-            info: 'bg-blue-400',
+            error: "bg-red-400",
+            success: "text-green-400",
+            warning: "text-yellow-400",
+            info: "bg-blue-400",
           },
         }}
       />
       <h2 className="text-xl mb-4">Create Booking</h2>
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
+      >
         <input
           type="text"
           name="user_id"
@@ -126,20 +127,15 @@ const BookingForm: React.FC = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-2 bg-green-600 hover:bg-green-900 rounded-md text-white font-semibold transition duration-300"
+            className="w-full py-2 bg-green-600 hover:bg-green-700 rounded-md text-white font-semibold transition duration-300"
           >
-            {isLoading ? 'Creating...' : 'Create Booking'}
+            {isLoading ? "Creating..." : "Create Booking"}
           </button>
         </div>
-        <div className='flex gap-6 mb-8'>
-      <button className='bg-blue-500 hover:bg-orange-500 text-white p-2 rounded mb-8' onClick={handlePaymentsClick}>
-      Go to Pay
-    </button>
-    </div>
       </form>
       
     </div>
   );
 };
 
-export default BookingForm;
+export default BookingFormAdmin;

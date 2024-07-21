@@ -191,7 +191,7 @@ const VehicleSpecifications: React.FC = () => {
                 return (
                   <div
                     key={spec.vehicleSpec_id}
-                    className="bg-gray-700 p-6 rounded-lg shadow-lg cursor-pointer"
+                    className="bg-gray-700 p-6 rounded-lg shadow-lg cursor-pointer "
                     onClick={() => handleCardClick(spec)}
                   >
                     <img

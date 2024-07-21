@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetVehicleSpecificationsQuery } from '../VehiclesSpecifications/vSpecificationsApi';
-import { Toaster } from 'sonner';
+import { Toaster, toast } from 'sonner';
 import { images } from '../../Components/Cloudinary/cloudinary';
 
 export interface TVehicleSpecification {
@@ -25,7 +25,13 @@ const VehicleSpecifications: React.FC = () => {
   const [selectedSpec, setSelectedSpec] = useState<null | TVehicleSpecification>(null);
 
   const handleBooking = (vehicleSpec_id: number) => {
-    navigate(`/bookingForm?vehicleSpec_id=${vehicleSpec_id}`);
+    const userId = localStorage.getItem('user_id');
+    if (userId) {
+      navigate(`/bookingForm?vehicleSpec_id=${vehicleSpec_id}`);
+    } else {
+      toast.error('Please log in to book a vehicle');
+      navigate('/login');
+    }
   };
 
   const handleCardClick = (spec: TVehicleSpecification) => {
@@ -39,8 +45,9 @@ const VehicleSpecifications: React.FC = () => {
   const getImageForSpec = (model: string) => {
     const imageName = model.toLowerCase();
     const image = images.find(img => img.id.toLowerCase() === imageName);
-    return image ? `https://res.cloudinary.com/dcwglllgt/image/upload/${image.id}.jpg` :
-      `https://via.placeholder.com/300x200?text=${encodeURIComponent(model)}`;
+    return image
+      ? `https://res.cloudinary.com/dcwglllgt/image/upload/${image.id}.jpg`
+      : `https://via.placeholder.com/300x200?text=${encodeURIComponent(model)}`;
   };
 
   return (

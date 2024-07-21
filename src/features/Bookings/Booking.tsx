@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useGetBookingsQuery, useDeleteBookingsMutation, useUpdateBookingsMutation } from './BookingApi';
 import { Toaster, toast } from 'sonner';
-import BookingForm from '../../Components/BookingForm';
+import BookingFormAdmin from '../../Components/BookingForm admin';
 import { useCreatePaymentsMutation } from '../../Components/PaymentsWithStripe/stripeApi';
 import { TBookedVehicles } from '../Bookings/BookingApi';
  
@@ -72,7 +72,7 @@ const Bookings: React.FC = () => {
       />
       <div className="overflow-x-auto bg-gray-800 text-white  p-4 h-screen overflow-y-auto">
         <h1 className="text-xl my-4">My Bookings</h1>
-        <BookingForm />
+        <BookingFormAdmin />
         <table className="table table-xs">
           <thead>
             <tr>

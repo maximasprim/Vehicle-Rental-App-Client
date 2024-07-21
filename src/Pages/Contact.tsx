@@ -7,7 +7,7 @@ export default function Contact() {
     return (
         <>
             <Navbar />
-            <div className="mx-auto max-w-7xl px-4 text-neutral-content-200 bg-base-300">
+            <div className="mx-auto max-w-full px-4 text-neutral-content-200 bg-base-300">
                 {/* Hero Map */}
                 <div className="flex flex-col space-y-8 pb-10 pt-12 md:pt-24">
                     <div className="mx-auto max-w-max p-1 px-3">

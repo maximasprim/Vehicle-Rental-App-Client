@@ -6,12 +6,14 @@ import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 
 export default function App() {
   const [publicId, setPublicId] = useState("");
-  const [cloudName] = useState("hzxyensd5");
+  const [cloudName] = useState("dcwglllgt");
   const [uploadPreset] = useState("aoh4fpwm");
+  const folder = "vehicles";
 
   const [uwConfig] = useState({
     cloudName,
     uploadPreset,
+    folder
   });
 
   const cld = new Cloudinary({

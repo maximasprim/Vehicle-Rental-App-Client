@@ -1,7 +1,6 @@
 
 
-// import React from 'react'
-// import ReactDOM from 'react-dom/client'
+
 import './index.css'
 import Home from './Pages/Home.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -10,8 +9,7 @@ import Error from './Pages/Error.tsx'
 import Contact from './Pages/Contact.tsx'
 import Dashboard from './Pages/Dashboard.tsx'
 import About from './Pages/About.tsx'
-// import Users from './Components/dashboard/Users.tsx'
-import UserProfiles from './Components/Admin dashboard/AdminProfiles.tsx'
+
 import UsersList from './features/Users/usersList.tsx'
 import Appi from './Pages/AdminDashboard/adminDashboard.tsx'
 import RegisterUser from './features/Register/register.tsx'
@@ -113,8 +111,7 @@ const router = createBrowserRouter([
   {
     path: 'carousel',
     errorElement:<Error/>,
-  },
-  
+  }, 
   
   
   {
@@ -173,7 +170,11 @@ const router = createBrowserRouter([
     element: <Services/>,
     errorElement:<Error/>,
   },
-  
+  {
+    path: 'usersById',
+    element: <UserProfile/>,
+    errorElement:<Error/>,
+  },
   
   
   
@@ -261,15 +262,11 @@ const router = createBrowserRouter([
 
       },
       
-      {
-        path: "user-profiles",
-        element: <UserProfiles />,
-      },
-      {
-        path: 'usersById',
-        element: <UserProfile/>,
-        errorElement:<Error/>,
-      },
+      // {
+      //   path: "user-profiles",
+      //   element: <UserProfiles />,
+      // },
+      
       {
         path: 'singleUserWithTickets',
         element: < SingleUserTickets />,

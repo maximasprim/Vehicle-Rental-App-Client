@@ -12,7 +12,7 @@ export interface TLocation {
 export const LocationsApi = createApi({
   reducerPath: 'locationsApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://vehicle-renting-service-api.onrender.com/',
+    baseUrl: ' http://localhost:3000',
     prepareHeaders: (headers) => {
       const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
       const token = userDetails?.token;

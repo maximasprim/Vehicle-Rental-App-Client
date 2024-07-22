@@ -81,7 +81,7 @@ const FleetManagement: React.FC = () => {
           },
         }}
       />
-      <div className="overflow-x-auto bg-gray-800 text-white p-4 h-screen overflow-y-auto">
+      <div className="overflow-x-auto bg-gray-800 text-white p-4 h-screen overflow-y-auto w-full">
         <h1 className="text-xl my-4">Fleet Management</h1>
         <form onSubmit={handleCreate} className="mb-4">
           <div className="grid grid-cols-2 gap-4">

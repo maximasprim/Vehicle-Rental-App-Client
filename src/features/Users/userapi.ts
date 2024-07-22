@@ -31,7 +31,7 @@ export interface TBookedVehicles {
 export const usersApi = createApi({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://vehicle-renting-service-api.onrender.com/',
+    baseUrl: 'http://localhost:3000/',
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       console.log('Token:', token);
@@ -86,7 +86,9 @@ export const usersApi = createApi({
         body: user,
       }),
     }),
-    deleteUser: builder.mutation<{ id: number }, number>({
+    deleteUser: builder.mutation<{
+      [x: string]: any; id: number 
+}, number>({
       query: (id) => ({
         url: `users/${id}`,
         method: 'DELETE',

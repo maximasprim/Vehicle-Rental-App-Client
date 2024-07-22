@@ -15,11 +15,11 @@ export interface TPayment {
 }
 
 const Payments: React.FC = () => {
-  const { data, isLoading } = useGetPaymentsQuery();
+  const { data, isLoading } = useGetPaymentsQuery(undefined,{pollingInterval: 1000});
   const [createPayment] = useCreatePaymentMutation();
   const [updatePayment] = useUpdatePaymentMutation();
   const [deletePayment, { data: deleteMsg }] = useDeletePaymentMutation();
-
+console.log(data)
   const [newPayment, setNewPayment] = useState<Partial<TPayment>>({
     booking_id: 0,
     amount: 0,
@@ -74,7 +74,7 @@ const Payments: React.FC = () => {
           },
         }}
       />
-      <div className="overflow-x-auto bg-gray-800 text-white  p-4 h-screen overflow-y-auto">
+      <div className="overflow-x-auto bg-gray-800 text-white  p-4 h-screen overflow-y-auto w-full">
         <h1 className="text-xl my-4">Payments</h1>
         <form onSubmit={handleCreate} className="mb-4">
           <div className="grid grid-cols-2 gap-4">

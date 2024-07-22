@@ -52,7 +52,7 @@ function SideNav() {
         </Link>
       </li>
       <li>
-        <Link to="usersById">
+        <Link to="/usersById">
           <SquareUserRound />
           My Profile
         </Link>

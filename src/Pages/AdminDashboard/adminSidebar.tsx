@@ -78,7 +78,7 @@ const Sidebar: React.FC = () => {
               <Link to="locations">Locations & Branches</Link>
           </li>
           <li>
-              <Link to="cloudinary">Settings</Link>
+              <Link to="cloudinary">My Gallery</Link>
           </li>
         
         </ul>

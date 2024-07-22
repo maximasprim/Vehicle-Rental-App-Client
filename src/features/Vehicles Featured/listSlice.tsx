@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetVehicleSpecificationsQuery } from '../VehiclesSpecifications/vSpecificationsApi';
 import { Toaster, toast } from 'sonner';
@@ -19,7 +19,8 @@ export interface TVehicleSpecification {
 }
 
 const VehicleSpecifications: React.FC = () => {
-  const { data, error, isLoading,refetch } = useGetVehicleSpecificationsQuery();
+  const { data, error, isLoading} = useGetVehicleSpecificationsQuery(undefined,{pollingInterval: 10000});
+  console.log(data);
   const navigate = useNavigate();
 
   const [selectedSpec, setSelectedSpec] = useState<null | TVehicleSpecification>(null);
@@ -34,25 +35,27 @@ const VehicleSpecifications: React.FC = () => {
     }
   };
 
-  const fetchFetchFeaturedVehicles = async () => {
-    try {
-      await refetch();
-      localStorage.setItem('featuredVehicles', JSON.stringify(data));
-    } catch (error) {
-      console.error('Failed to refetch featured vehicles:', error);
-    }
-  };
+  // const fetchFetchFeaturedVehicles = async () => {
+  //   try {
+  //     await refetch();
+  //     localStorage.setItem('featuredVehicles', JSON.stringify(data));
+  //   } catch (error) {
+  //     console.error('Failed to refetch featured vehicles:', error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchFetchFeaturedVehicles();
-  }, [data]);
+  // useEffect(() => {
+  //   fetchFetchFeaturedVehicles();
+  // }, [data]);
 
   const handleCardClick = (spec: TVehicleSpecification) => {
     setSelectedSpec(spec);
+    localStorage.setItem('selectedVehicleId', spec.vehicle_id.toString());
   };
 
   const handleBackToList = () => {
     setSelectedSpec(null);
+    localStorage.removeItem('selectedVehicleId');
   };
 
   const getImageForSpec = (model: string) => {
@@ -76,7 +79,7 @@ const VehicleSpecifications: React.FC = () => {
         }}
       />
       <div className="min-h-screen bg-gray-800 text-white p-6">
-        <h1 className="text-6xl text-orange-300 mb-6">Available Vehicles</h1>
+        <h1 className="text-6xl text-orange-300 mb-6 font-style: italic">Available Vehicles</h1>
 
         {isLoading ? (
           <p>Loading...</p>

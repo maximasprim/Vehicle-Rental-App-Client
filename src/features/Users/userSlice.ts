@@ -65,7 +65,9 @@ const usersSlice = createSlice({
       })
       .addMatcher(usersApi.endpoints.deleteUser.matchFulfilled, (state, action) => {
         state.loading = false;
-        state.users = state.users.filter((user) => user.user_id !== action.payload);
+        // Assume action.payload contains an object with user_id
+        const userId = action.payload.user_id;
+        state.users = state.users.filter((user) => user.user_id !== userId);
       })
       .addMatcher(usersApi.endpoints.deleteUser.matchRejected, (state, action) => {
         state.loading = false;

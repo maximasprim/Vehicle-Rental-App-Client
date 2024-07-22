@@ -8,13 +8,17 @@ import { useGetLocationsQuery } from '../../features/Locations and Branches/loca
 import IncomeBookingsChart from '../../Components/IncomeBookingCharts'; // Import the chart component
 
 const AdminDashboard: React.FC = () => {
-  const { data: paymentsData, isLoading: paymentsLoading } = useGetPaymentsQuery();
-  const { data: bookingsData, isLoading: bookingsLoading } = useGetBookingsQuery();
-  const { data: usersData, isLoading: usersLoading } = useFetchUsersQuery();
-  const { data: ticketsData, isLoading: ticketsLoading } = useGetTicketsQuery();
-  const { data: vehicleSpecsData, isLoading: vehicleSpecsLoading } = useGetVehicleSpecificationsQuery();
-  const { data: locationsData, isLoading: locationsLoading } = useGetLocationsQuery();
-  
+  const { data: paymentsData, isLoading: paymentsLoading } = useGetPaymentsQuery(undefined,{pollingInterval: 10000});
+  const { data: bookingsData, isLoading: bookingsLoading } = useGetBookingsQuery(undefined,{pollingInterval: 10000});
+  const { data: usersData, isLoading: usersLoading } = useFetchUsersQuery(undefined,{pollingInterval: 10000});
+  const { data: ticketsData, isLoading: ticketsLoading } = useGetTicketsQuery(undefined,{pollingInterval: 10000});
+  const { data: vehicleSpecsData, isLoading: vehicleSpecsLoading } = useGetVehicleSpecificationsQuery(undefined,{pollingInterval: 10000});
+  const { data: locationsData, isLoading: locationsLoading } = useGetLocationsQuery(undefined,{pollingInterval: 10000});
+
+
+  console.log(paymentsData, bookingsData, usersData, ticketsData, vehicleSpecsData, locationsData);
+
+
   const [totalIncome, setTotalIncome] = useState<number>(0);
   const [previousIncome, setPreviousIncome] = useState<number>(0);
   const [incomeChange, setIncomeChange] = useState<number>(0);
@@ -220,7 +224,7 @@ const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-white p-6 shadow rounded-md">
+      {/* <div className="bg-white p-6 shadow rounded-md">
         <h2 className="text-xl font-semibold mb-4">Live Car Status</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full">
@@ -268,7 +272,7 @@ const AdminDashboard: React.FC = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> */}
 
       <div className="bg-white p-6 shadow rounded-md mt-6">
         <h2 className="text-xl font-semibold mb-4">Earning Summary</h2>

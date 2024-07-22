@@ -25,11 +25,11 @@ export interface TBookings {
 }
 
 const Bookings: React.FC = () => {
-  const { data, isLoading } = useGetBookingsQuery();
+  const { data, isLoading } = useGetBookingsQuery(undefined,{pollingInterval: 1000});
   const [updateBooking] = useUpdateBookingsMutation();
   const [deleteBooking, { data: deleteMsg }] = useDeleteBookingsMutation();
   const [createCheckout] = useCreatePaymentsMutation();
-
+console.log(data)
   const handleUpdate = (booking_id: number) => {
     const updateBookingData = {
       booking_status: 'booking updated',

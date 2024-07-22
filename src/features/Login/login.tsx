@@ -7,6 +7,18 @@ import { Facebook,Twitter } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
+interface CustomJwtPayload {
+  sub: string;
+  user_id: number;
+  fullName: string;
+  role: string;
+  exp: number;
+}
+
+
+
+
+
 const LoginUser: React.FC = () => {
   const [username, setUsername] = useState('');
   const [role] = useState('');
@@ -24,7 +36,7 @@ const LoginUser: React.FC = () => {
       setMessage('Login successful!');
       console.log('Login successful:', userData)
       const token = userData.token;
-      const decoded= jwtDecode(token);
+      const decoded = jwtDecode<CustomJwtPayload>(token);
       console.log('Decoded token:', decoded);
        // Navigate based on the role
        if (decoded.role === 'admin') {

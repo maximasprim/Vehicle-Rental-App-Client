@@ -11,6 +11,22 @@ const images = [
   { id: 'teana', route: '/sample4' },
   { id: 'huracan', route: '/sample5' },
   { id: 'cayenne', route: '/sample6' },
+  { id: 'crown', route: '/sample7' },
+  { id: 'Corolla', route: '/sample8' },
+  { id: 'vehicles/Civic', route: '/sample9' },
+  { id: 'vehicles/Escape', route: '/sample10' },
+  { id: 'Malibu', route: '/sample11' },
+  { id: 'Altima', route: '/sample12' },
+  { id: 'Elantra', route: '/sample13' },
+  { id: 'X5', route: '/sample14' },
+  { id: 'Q7', route: '/sample15' },
+  { id: 'C-Class', route: '/sample16' },
+  { id: 'Model S', route: '/sample17' },
+  { id: 'Sorento', route: '/sample19' },
+  { id: 'CX-5', route: '/sample20' },
+  { id: 'Outback', route: '/sample21' },
+  { id: 'XC90', route: '/sample22' },
+  { id: 'Wrangler', route: '/sample23' },
   
 ];
 

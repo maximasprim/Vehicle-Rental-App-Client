@@ -25,10 +25,11 @@ export interface TVehicleSpecification {
 }
 
 const VehicleSpecifications: React.FC = () => {
-  const { data, error, isLoading,refetch } = useGetVehicleSpecificationsQuery();
+  const { data, error, isLoading,refetch } = useGetVehicleSpecificationsQuery(undefined,{pollingInterval: 10000});
   const [createVehicleSpecification] = useCreateVehicleSpecificationMutation();
   const [updateVehicleSpecification] = useUpdateVehicleSpecificationMutation();
   const [deleteVehicleSpecification, { data: deleteMsg }] = useDeleteVehicleSpecificationMutation();
+  console.log(data);
 
   const [formState, setFormState] = useState<Partial<TVehicleSpecification>>({
     vehicle_id: 0,
@@ -123,7 +124,7 @@ const VehicleSpecifications: React.FC = () => {
           },
         }}
       />
-      <div className="min-h-screen bg-gray-800 text-white p-6 h-screen overflow-y-auto">
+      <div className="min-h-screen bg-gray-800 text-white p-6 h-screen overflow-y-auto w-full">
         <h1 className="text-2xl mb-6">Vehicle Specifications</h1>
         <VehicleSpecificationForm
           formState={formState}

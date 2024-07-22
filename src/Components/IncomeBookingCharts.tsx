@@ -66,7 +66,7 @@ const IncomeBookingsChart: React.FC<IncomeBookingsChartProps> = ({ labels, incom
   };
 
   return (
-    <div className="bg-white p-6 shadow rounded-md">
+    <div className="bg-white-400 p-6 shadow rounded-md w-full">
       <h2 className="text-xl font-semibold mb-4">Income vs Bookings</h2>
       <Line data={data} options={options} />
     </div>

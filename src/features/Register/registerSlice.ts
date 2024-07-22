@@ -23,9 +23,9 @@ export const registerUser = createAsyncThunk<
   { rejectValue: string } // Configuration object type for the thunk
 >(
   'register/registerUser',
-  async (userData: RegisterUser, { rejectWithValue }) => {
+  async (userData: RegisterUser) => {
     try {
-      const response = await fetch('http://localhost:3000/register', {
+      const response = await fetch('https://vehicle-renting-service-api.onrender.com/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export const registerUser = createAsyncThunk<
 
       return await response.json();
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.log('Failed to register user', error);
     }
   }
 );

@@ -1,6 +1,10 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom';
+import { clearCredentials } from '../features/Login/loginSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 const Navbar = [
@@ -14,7 +18,16 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
+
 export default function Example() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+const handleLogOut = () => {
+  dispatch(clearCredentials());
+  toast.success('Logged out successfully');
+  navigate('/');
+};
   return (
     <Disclosure as="nav" className="bg-gray-900">
       
@@ -97,9 +110,7 @@ export default function Example() {
                   </a>
                 </MenuItem>
                 <MenuItem>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                    Sign out
-                  </a>
+                <button onClick={handleLogOut} className="block px-4 py-2 text-sm text-red-700 data-[focus]:bg-gray-100">Sign Out</button>
                 </MenuItem>
               </MenuItems>
             </Menu>

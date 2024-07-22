@@ -31,7 +31,7 @@ export interface TBookedVehicles {
 export const usersApi = createApi({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000/',
+    baseUrl: 'https://vehicle-renting-service-api.onrender.com/',
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       console.log('Token:', token);

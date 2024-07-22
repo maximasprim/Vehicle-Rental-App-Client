@@ -43,6 +43,29 @@ const AdminDashboard: React.FC = () => {
   const [chartIncomeData, setChartIncomeData] = useState<number[]>([]);
   const [chartBookingsData, setChartBookingsData] = useState<number[]>([]);
 
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const formattedDateTime = currentDateTime.toLocaleString('en-US', {
+    weekday: 'short',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  });
+
+
+  
+
   useEffect(() => {
     if (paymentsData) {
       const income = paymentsData.reduce((sum: number, payment: TPayment) => sum + payment.amount, 0);
@@ -127,7 +150,7 @@ const AdminDashboard: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-semibold">Today's Statistics</h1>
-          <p className="text-gray-600">Tue, 14 May, 2022 11:30 AM</p>
+          <p className="text-gray-600">{formattedDateTime}</p>
         </div>
         {/* <input
           type="text"
@@ -138,49 +161,49 @@ const AdminDashboard: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <div className="bg-white p-6 shadow rounded-md">
-          <h2 className="text-xl font-semibold mb-4">Income</h2>
-          <p className="text-3xl font-semibold">${totalIncome.toFixed(2)}</p>
+          <h2 className="text-xl font-semibold mb-4 ">Income</h2>
+          <p className="text-3xl font-semibold text-green-700	color: rgb(21 128 61)">${totalIncome.toFixed(2)}</p>
           <p className={`text-${incomeChange >= 0 ? 'green' : 'red'}-600`}>
-            {incomeChange.toFixed(1)}% {incomeChange >= 0 ? 'up' : 'down'} from yesterday
+            <span className='text-red-700	color: rgb(185 28 28)'>{incomeChange.toFixed(1)}% </span>{incomeChange >= 0 ? 'up' : 'down'} from yesterday
           </p>
-          <p className="text-gray-600 mt-2">Previous income ${previousIncome.toFixed(2)}</p>
+          <p className="text-gray-600 mt-2">Previous income <span className='text-cyan-500	color: rgb(6 182 212)'>${previousIncome.toFixed(2)}</span> </p>
         </div>
         <div className="bg-white p-6 shadow rounded-md">
           <h2 className="text-xl font-semibold mb-4">Bookings</h2>
-          <p className="text-3xl font-semibold">{totalBookings}</p>
+          <p className="text-3xl font-semibold text-green-700	color: rgb(21 128 61)">{totalBookings}</p>
           <p className={`text-${bookingsChange >= 0 ? 'green' : 'red'}-600`}>
-            {bookingsChange.toFixed(1)}% {bookingsChange >= 0 ? 'up' : 'down'} from yesterday
+            <span className='text-red-700	color: rgb(185 28 28)'>{bookingsChange.toFixed(1)}% </span>{bookingsChange >= 0 ? 'up' : 'down'} from yesterday
           </p>
-          <p className="text-gray-600 mt-2">Previous bookings {previousBookings}</p>
+          <p className="text-gray-600 mt-2">Previous bookings <span className='text-cyan-500	color: rgb(6 182 212)'>{previousBookings}</span></p>
         </div>
 
         <div className="bg-white p-6 shadow rounded-md">
           <h2 className="text-xl font-semibold mb-4">Users</h2>
-          <p className="text-3xl font-semibold">{totalUsers}</p>
+          <p className="text-3xl font-semibold text-green-700	color: rgb(21 128 61)">{totalUsers}</p>
           <p className={`text-${usersChange >= 0 ? 'green' : 'red'}-600`}>
-            {usersChange.toFixed(1)}% {usersChange >= 0 ? 'up' : 'down'} from yesterday
+            <span className='text-red-700	color: rgb(185 28 28)'>{usersChange.toFixed(1)}% </span>{usersChange >= 0 ? 'up' : 'down'} from yesterday
           </p>
-          <p className="text-gray-600 mt-2">Previous users {previousUsers}</p>
+          <p className="text-gray-600 mt-2">Previous users <span className='text-cyan-500	color: rgb(6 182 212)'>{previousUsers}</span></p>
         </div>
         <div className="bg-white p-6 shadow rounded-md">
           <h2 className="text-xl font-semibold mb-4">Customer Tickets</h2>
-          <p className="text-3xl font-semibold">{totalTickets}</p>
+          <p className="text-3xl font-semibold text-green-700	color: rgb(21 128 61)">{totalTickets}</p>
           <p className={`text-${ticketsChange >= 0 ? 'green' : 'red'}-600`}>
-            {ticketsChange.toFixed(1)}% {ticketsChange >= 0 ? 'up' : 'down'} from yesterday
+            <span className='text-red-700	color: rgb(185 28 28)'>{ticketsChange.toFixed(1)}% </span>{ticketsChange >= 0 ? 'up' : 'down'} from yesterday
           </p>
-          <p className="text-gray-600 mt-2">Previous tickets {previousTickets}</p>
+          <p className="text-gray-600 mt-2">Previous tickets <span className='text-cyan-500	color: rgb(6 182 212)'>{previousTickets}</span> </p>
         </div>
         <div className="bg-white p-6 shadow rounded-md">
           <h2 className="text-xl font-semibold mb-4">Vehicle Specifications</h2>
-          <p className="text-3xl font-semibold">{totalVehicleSpecs}</p>
+          <p className="text-3xl font-semibold text-green-700	color: rgb(21 128 61)">{totalVehicleSpecs}</p>
           <p className={`text-${vehicleSpecsChange >= 0 ? 'green' : 'red'}-600`}>
-            {vehicleSpecsChange.toFixed(1)}% {vehicleSpecsChange >= 0 ? 'up' : 'down'} from yesterday
+            <span className='text-red-700	color: rgb(185 28 28)'>{vehicleSpecsChange.toFixed(1)}% </span>{vehicleSpecsChange >= 0 ? 'up' : 'down'} from yesterday
           </p>
-          <p className="text-gray-600 mt-2">Previous vehicle specifications {previousVehicleSpecs}</p>
+          <p className="text-gray-600 mt-2">Previous vehicle specifications <span className='text-cyan-500	color: rgb(6 182 212)'>{previousVehicleSpecs}</span> </p>
         </div>
         <div className="bg-white p-6 shadow rounded-md">
           <h2 className="text-xl font-semibold mb-4">Locations</h2>
-          <p className="text-3xl font-semibold">{locationsData?.length}</p>
+          <p className="text-3xl font-semibold text-green-700	color: rgb(21 128 61)">{locationsData?.length}</p>
           <p className="text-gray-600 mt-2">Total number of locations</p>
         </div>
       </div>

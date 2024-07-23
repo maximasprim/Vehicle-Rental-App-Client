@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useFetchUserByIdQuery, useUpdateUserMutation } from './userapi';
+import Avatar from 'react-avatar';
 
 const UserProfile: React.FC = () => {
-  const userId = localStorage.getItem('user_id');
-  const { data: user, error, isLoading } = useFetchUserByIdQuery(userId);
+  const [userId, setUserId] = useState<string | null>(null);
+  const userID = localStorage.getItem('user_id');
+  console.log(userID)
+
+  useEffect(() => {
+    const id = localStorage.getItem('user_id');
+    if (id) {
+      setUserId(userID);
+    }
+    console.log('User ID:', id);
+  }, []);
+
+  const { data: user, error, isLoading } = useFetchUserByIdQuery(userId || '');
   const [updateUser] = useUpdateUserMutation();
 
   const [formData, setFormData] = useState({
@@ -36,8 +48,14 @@ const UserProfile: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!userId) {
+      alert('User ID not found. Please try again.');
+      return;
+    }
+
     const formDataToSubmit = new FormData();
-    formDataToSubmit.append('id', userId!);
+    formDataToSubmit.append('id', userId);
     formDataToSubmit.append('full_name', formData.full_name);
     formDataToSubmit.append('email', formData.email);
     formDataToSubmit.append('contact_phone', formData.contact_phone);
@@ -47,7 +65,8 @@ const UserProfile: React.FC = () => {
     }
 
     try {
-      await updateUser(formDataToSubmit).unwrap();
+      console.log(formDataToSubmit, userId);
+      await updateUser({ userId, formData: formDataToSubmit }).unwrap();
       alert('User updated successfully');
     } catch (error) {
       console.error('Failed to update user:', error);
@@ -60,18 +79,21 @@ const UserProfile: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-600">
       <div className="bg-gray-400 p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-semibold mb-6 text-center text-slate-100">My Profile</h1>
         {user && (
           <>
-            <div className="mb-6">
-              <p className="text-lg font-medium text-white">Full Name: <span className="font-normal text-slate-100">{user.full_name}</span></p>
-              <p className="text-lg font-medium text-white">Email: <span className="font-normal text-slate-100">{user.email}</span></p>
-              <p className="text-lg font-medium text-white">Role: <span className="font-normal text-slate-100">{user.role}</span></p>
+            <div className="flex flex-col items-center mb-6">
+              {user.profile_picture ? (
+                <img src={user.profile_picture} alt="Profile" className="w-24 h-24 rounded-full mb-4" />
+              ) : (
+                <Avatar name={user.full_name} round={true} size="100" className="mb-4" />
+              )}
+              <h1 className="text-2xl font-semibold text-slate-100 mb-2">{user.full_name}</h1>
+              <p className="text-md font-medium text-slate-300">{user.email}</p>
+              <p className="text-md font-medium text-slate-300">{user.role}</p>
+            </div>
+            <div className="space-y-2 text-center mb-6">
               <p className="text-lg font-medium text-white">Contact Phone: <span className="font-normal text-slate-100">{user.contact_phone}</span></p>
               <p className="text-lg font-medium text-white">Address: <span className="font-normal text-slate-100">{user.address}</span></p>
-              {user.profile_picture && (
-                <img src={user.profile_picture} alt="Profile" className="w-24 h-24 rounded-full mx-auto mb-4"/>
-              )}
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -119,7 +141,7 @@ const UserProfile: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-black">Profile Picture</label>
+                <label className="block text-gray-700">Profile Picture</label>
                 <input
                   type="file"
                   name="profile_picture"

@@ -34,6 +34,7 @@ const VehiclesList: React.FC = () => {
   useEffect(() => {
     fetchVehiclesAndUpdateStorage();
   }, []); // Fetch vehicles on component mount
+  console.log(vehicles);
 
   const handleAddVehicle = async () => {
     try {
@@ -92,10 +93,10 @@ const VehiclesList: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 bg-gray-800">
+    <div className="container mx-auto p-4 bg-gray-800 h-screen overflow-y-auto">
       <h1 className="text-2xl font-bold mb-4">Vehicles List</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 ">
         <input
           type="number"
           name="rental_rate"
@@ -110,8 +111,8 @@ const VehiclesList: React.FC = () => {
           onChange={handleInputChange}
           className="input input-bordered w-full mb-2"
         >
-          <option value="TRUE">Available</option>
-          <option value="FALSE">Unavailable</option>
+          <option value="true">Available</option>
+          <option value="false">Unavailable</option>
         </select>
 
         {editMode ? (

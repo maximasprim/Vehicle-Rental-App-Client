@@ -1,40 +1,51 @@
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { clearCredentials } from '../features/Login/loginSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+import { useState, useEffect } from 'react';
+import { useFetchUserByIdQuery } from '../features/Users/userapi';
+import Avatar from 'react-avatar';
 
 const Navbar = [
   { name: 'Dashboard', href: '/login', current: true },
   { name: 'Home', href: '/', current: false },
   { name: 'About', href: '/about', current: false },
   { name: 'Contact Us', href: 'Contact', current: false },
-]
+];
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
-
 
 export default function Example() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [userId, setUserId] = useState<string | null>(null);
 
-const handleLogOut = () => {
-  dispatch(clearCredentials());
-  toast.success('Logged out successfully');
-  navigate('/');
-};
+  useEffect(() => {
+    const id = localStorage.getItem('user_id');
+    if (id) {
+      setUserId(id);
+    }
+  }, []);
+
+  const { data: user } = useFetchUserByIdQuery(userId || '');
+
+  const handleLogOut = () => {
+    dispatch(clearCredentials());
+    toast.success('Logged out successfully');
+    navigate('/');
+  };
+
   return (
     <Disclosure as="nav" className="bg-gray-900">
-      
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            {/* Mobile menu button*/}
+            {/* Mobile menu button */}
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
@@ -65,28 +76,30 @@ const handleLogOut = () => {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-          <Link to="/notifications">
-      <button
-        type="button"
-        className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-      >
-        <span className="absolute -inset-1.5" />
-        <span className="sr-only">View notifications</span>
-        <BellIcon aria-hidden="true" className="h-6 w-6" />
-      </button>
-    </Link>
+            <Link to="/notifications">
+              <button
+                type="button"
+                className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+              >
+                <span className="absolute -inset-1.5" />
+                <span className="sr-only">View notifications</span>
+                <BellIcon aria-hidden="true" className="h-6 w-6" />
+              </button>
+            </Link>
 
             {/* Profile dropdown */}
             <Menu as="div" className="relative ml-3">
-              <div>
+            <div>
                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
-                  <img
-                    alt=""
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    className="h-8 w-8 rounded-full"
-                  />
+                  <div className="relative flex items-center justify-center w-8 h-8 rounded-full ring-2 ring-offset-2 ring-offset-gray-800 ring-white">
+                    {user?.profile_picture ? (
+                      <img src={user.profile_picture} alt="Profile" className="w-full h-full rounded-full" />
+                    ) : (
+                      <Avatar name={user?.full_name} round={true} size="32" />
+                    )}
+                  </div>
                 </MenuButton>
               </div>
               <MenuItems
@@ -103,14 +116,15 @@ const handleLogOut = () => {
                     Settings
                   </a>
                 </MenuItem>
-                
                 <MenuItem>
                   <a href="login" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                     Admin Login
                   </a>
                 </MenuItem>
                 <MenuItem>
-                <button onClick={handleLogOut} className="block px-4 py-2 text-sm text-red-700 data-[focus]:bg-gray-100">Sign Out</button>
+                  <button onClick={handleLogOut} className="block px-4 py-2 text-sm text-red-700 data-[focus]:bg-gray-100">
+                    Sign Out
+                  </button>
                 </MenuItem>
               </MenuItems>
             </Menu>
@@ -137,5 +151,5 @@ const handleLogOut = () => {
         </div>
       </DisclosurePanel>
     </Disclosure>
-  )
+  );
 }

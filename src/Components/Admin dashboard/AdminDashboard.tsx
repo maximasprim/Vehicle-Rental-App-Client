@@ -8,15 +8,15 @@ import { useGetLocationsQuery } from '../../features/Locations and Branches/loca
 import IncomeBookingsChart from '../../Components/IncomeBookingCharts'; // Import the chart component
 
 const AdminDashboard: React.FC = () => {
-  const { data: paymentsData, isLoading: paymentsLoading } = useGetPaymentsQuery(undefined,{pollingInterval: 10000});
-  const { data: bookingsData, isLoading: bookingsLoading } = useGetBookingsQuery(undefined,{pollingInterval: 10000});
-  const { data: usersData, isLoading: usersLoading } = useFetchUsersQuery(undefined,{pollingInterval: 10000});
-  const { data: ticketsData, isLoading: ticketsLoading } = useGetTicketsQuery(undefined,{pollingInterval: 10000});
-  const { data: vehicleSpecsData, isLoading: vehicleSpecsLoading } = useGetVehicleSpecificationsQuery(undefined,{pollingInterval: 10000});
-  const { data: locationsData, isLoading: locationsLoading } = useGetLocationsQuery(undefined,{pollingInterval: 10000});
+  const { data: paymentsData, isLoading: paymentsLoading } = useGetPaymentsQuery(undefined,{pollingInterval: 50000});
+  const { data: bookingsData, isLoading: bookingsLoading } = useGetBookingsQuery(undefined,{pollingInterval: 50000});
+  const { data: usersData, isLoading: usersLoading } = useFetchUsersQuery(undefined,{pollingInterval: 50000});
+  const { data: ticketsData, isLoading: ticketsLoading } = useGetTicketsQuery(undefined,{pollingInterval: 50000});
+  const { data: vehicleSpecsData, isLoading: vehicleSpecsLoading } = useGetVehicleSpecificationsQuery(undefined,{pollingInterval: 50000});
+  const { data: locationsData, isLoading: locationsLoading } = useGetLocationsQuery(undefined,{pollingInterval: 50000});
 
 
-  console.log(paymentsData, bookingsData, usersData, ticketsData, vehicleSpecsData, locationsData);
+  // console.log(paymentsData, bookingsData, usersData, ticketsData, vehicleSpecsData, locationsData);
 
 
   const [totalIncome, setTotalIncome] = useState<number>(0);
@@ -194,7 +194,7 @@ const AdminDashboard: React.FC = () => {
           <p className="text-gray-600 mt-2">Previous tickets <span className='text-cyan-500	color: rgb(6 182 212)'>{previousTickets}</span> </p>
         </div>
         <div className="bg-white p-6 shadow rounded-md">
-          <h2 className="text-xl font-semibold mb-4">Vehicle Specifications</h2>
+          <h2 className="text-xl font-semibold mb-4">Vehicles/Vehicles Specs</h2>
           <p className="text-3xl font-semibold text-green-700	color: rgb(21 128 61)">{totalVehicleSpecs}</p>
           <p className={`text-${vehicleSpecsChange >= 0 ? 'green' : 'red'}-600`}>
             <span className='text-red-700	color: rgb(185 28 28)'>{vehicleSpecsChange.toFixed(1)}% </span>{vehicleSpecsChange >= 0 ? 'up' : 'down'} from yesterday

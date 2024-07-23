@@ -3,12 +3,12 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export interface Vehicle {
   vehicle_id: number;
   rental_rent: number;
-  availability: boolean;
+  availability: string;
 }
 
 export const vehiclesApi = createApi({
   reducerPath: 'vehiclesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://vehicle-renting-service-api.onrender.com/' }),
   endpoints: (builder) => ({
     fetchVehicles: builder.query<Vehicle[], void>({
       query: () => 'vehicles',

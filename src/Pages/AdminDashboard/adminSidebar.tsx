@@ -72,11 +72,12 @@ const Sidebar: React.FC = () => {
               <Link to="ticket">Customer Tickets</Link>
           </li>
           <li>
-              <Link to="cloudinaryform">Upload Vehicles Images</Link>
-          </li>
-          <li>
               <Link to="locations">Locations & Branches</Link>
           </li>
+          <li>
+              <Link to="cloudinaryform">Upload Vehicles Images</Link>
+          </li>
+          
           <li>
               <Link to="cloudinary">My Gallery</Link>
           </li>

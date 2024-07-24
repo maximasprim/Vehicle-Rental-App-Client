@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export interface Vehicle {
   vehicle_id: number;
   rental_rent: number;
-  availability: string;
+  availability: boolean;
 }
 
 export const vehiclesApi = createApi({

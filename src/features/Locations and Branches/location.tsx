@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGetLocationsQuery, useCreateLocationMutation, useUpdateLocationMutation, useDeleteLocationMutation } from './locationApi';
 import { Toaster, toast } from 'sonner';
 import LocationForm from './locationForm';
@@ -18,15 +18,24 @@ const Locations: React.FC = () => {
   const [updateLocation] = useUpdateLocationMutation();
   const [deleteLocation, { data: deleteMsg }] = useDeleteLocationMutation();
 
+  const [editingLocationId, setEditingLocationId] = useState<number | null>(null);
+  const [updatedLocation, setUpdatedLocation] = useState<Partial<TLocation>>({});
+
   const handleCreate = (newLocation: Partial<TLocation>) => {
     createLocation(newLocation);
   };
 
-  const handleUpdate = (location_id: number) => {
-    const updateLocationData = {
-      name: 'Updated Name',
-    };
-    updateLocation({ location_id, ...updateLocationData });
+  const handleEdit = (location: TLocation) => {
+    setEditingLocationId(location.location_id);
+    setUpdatedLocation(location);
+  };
+
+  const handleSave = async () => {
+    if (editingLocationId !== null) {
+      await updateLocation({ location_id: editingLocationId, ...updatedLocation });
+      setEditingLocationId(null);
+      toast.success('Location updated successfully');
+    }
   };
 
   const handleDelete = async (location_id: number) => {
@@ -67,14 +76,45 @@ const Locations: React.FC = () => {
             ) : (
               data && data.map((location: TLocation, index: number) => (
                 <tr key={index}>
-                  <th>{location.location_id}</th>
-                  <td>{location.name}</td>
-                  <td>{location.address}</td>
-                  <td>{location.contact_phone}</td>
+                  <td>{location.location_id}</td>
+                  <td>{editingLocationId === location.location_id ? (
+                    <input
+                      type="text"
+                      value={updatedLocation.name || location.name}
+                      onChange={(e) => setUpdatedLocation({ ...updatedLocation, name: e.target.value })}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    location.name
+                  )}</td>
+                  <td>{editingLocationId === location.location_id ? (
+                    <input
+                      type="text"
+                      value={updatedLocation.address || location.address}
+                      onChange={(e) => setUpdatedLocation({ ...updatedLocation, address: e.target.value })}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    location.address
+                  )}</td>
+                  <td>{editingLocationId === location.location_id ? (
+                    <input
+                      type="text"
+                      value={updatedLocation.contact_phone || location.contact_phone}
+                      onChange={(e) => setUpdatedLocation({ ...updatedLocation, contact_phone: e.target.value })}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    location.contact_phone
+                  )}</td>
                   <td>{location.created_at}</td>
                   <td>{location.updated_at}</td>
                   <td className="flex gap-2">
-                    <button className="btn btn-sm btn-outline btn-info" onClick={() => handleUpdate(location.location_id)}>Update</button>
+                    {editingLocationId === location.location_id ? (
+                      <button className="btn btn-sm btn-outline btn-success" onClick={handleSave}>Save</button>
+                    ) : (
+                      <button className="btn btn-sm btn-outline btn-info" onClick={() => handleEdit(location)}>Update</button>
+                    )}
                     <button className="btn btn-sm btn-outline btn-warning" onClick={() => handleDelete(location.location_id)}>Delete</button>
                   </td>
                 </tr>

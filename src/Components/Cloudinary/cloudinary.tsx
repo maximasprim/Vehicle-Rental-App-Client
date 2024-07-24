@@ -28,6 +28,9 @@ const images = [
   { id: 'XC90', route: '/admin/vehiclesSpecifications' },
   { id: 'Wrangler', route: '/admin/vehiclesSpecifications' },
   { id: 'Jetta', route: '/admin/vehiclesSpecifications' },
+  { id: 'YZF-R1', route: '/admin/vehiclesSpecifications' },
+  { id: 'Ninja ZX-10R', route: '/admin/vehiclesSpecifications' },
+  { id: 'Panigale V4', route: '/admin/vehiclesSpecifications' },
   
 ];
 
@@ -35,7 +38,7 @@ const Cloud = () => {
   const cld = new Cloudinary({ cloud: { cloudName: 'dcwglllgt' } });
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 h-screen overflow-y-auto">
       {images.map((image, index) => {
         const img = cld
           .image(image.id)

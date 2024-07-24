@@ -15,7 +15,7 @@ export interface TFleet {
 }
 
 const FleetManagement: React.FC = () => {
-  const { data,  isLoading } = useGetFleetsQuery();
+  const { data, isLoading } = useGetFleetsQuery();
   const [createFleet] = useCreateFleetMutation();
   const [updateFleet] = useUpdateFleetMutation();
   const [deleteFleet, { data: deleteMsg }] = useDeleteFleetMutation();
@@ -29,7 +29,8 @@ const FleetManagement: React.FC = () => {
     status: '',
   });
 
-  const [selectedFleet, setSelectedFleet] = useState<TFleet | null>(null);
+  const [editingFleetId, setEditingFleetId] = useState<number | null>(null);
+  const [updatedFleet, setUpdatedFleet] = useState<Partial<TFleet>>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -39,9 +40,9 @@ const FleetManagement: React.FC = () => {
     });
   };
 
-  const handleCreate = (e: React.FormEvent) => {
+  const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    createFleet(newFleet);
+    await createFleet(newFleet);
     setNewFleet({
       vehicle_id: 0,
       acquisition_date: '',
@@ -50,23 +51,25 @@ const FleetManagement: React.FC = () => {
       maintenance_cost: 0,
       status: '',
     });
+    toast.success('Fleet added successfully');
   };
 
-  const handleUpdate = (fleet_id: number) => {
-    const updateFleetData = {
-      status: 'updated',
-    };
-    updateFleet({ fleet_id, ...updateFleetData });
+  const handleEdit = (fleet: TFleet) => {
+    setEditingFleetId(fleet.fleet_id);
+    setUpdatedFleet(fleet);
+  };
+
+  const handleSave = async () => {
+    if (editingFleetId !== null) {
+      await updateFleet({ fleet_id: editingFleetId, ...updatedFleet });
+      setEditingFleetId(null);
+      toast.success('Fleet updated successfully');
+    }
   };
 
   const handleDelete = async (fleet_id: number) => {
     await deleteFleet(fleet_id);
     toast.success(deleteMsg?.msg || 'Fleet deleted successfully');
-  };
-
-  const handleViewMore = (fleet_id: number) => {
-    const fleet = data?.find((f: TFleet) => f.fleet_id === fleet_id) || null;
-    setSelectedFleet(fleet);
   };
 
   return (
@@ -157,19 +160,76 @@ const FleetManagement: React.FC = () => {
             ) : (
               data && data.map((fleet: TFleet, index: number) => (
                 <tr key={index}>
-                  <th>{fleet.fleet_id}</th>
-                  <td>{fleet.vehicle_id}</td>
-                  <td>{fleet.acquisition_date}</td>
-                  <td>{fleet.depreciation_rate}</td>
-                  <td>{fleet.current_value}</td>
-                  <td>{fleet.maintenance_cost}</td>
-                  <td>{fleet.status}</td>
+                  <td>{fleet.fleet_id}</td>
+                  <td>{editingFleetId === fleet.fleet_id ? (
+                    <input
+                      type="number"
+                      value={updatedFleet.vehicle_id ?? fleet.vehicle_id}
+                      onChange={(e) => setUpdatedFleet({ ...updatedFleet, vehicle_id: Number(e.target.value) })}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    fleet.vehicle_id
+                  )}</td>
+                  <td>{editingFleetId === fleet.fleet_id ? (
+                    <input
+                      type="date"
+                      value={updatedFleet.acquisition_date ?? fleet.acquisition_date}
+                      onChange={(e) => setUpdatedFleet({ ...updatedFleet, acquisition_date: e.target.value })}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    fleet.acquisition_date
+                  )}</td>
+                  <td>{editingFleetId === fleet.fleet_id ? (
+                    <input
+                      type="number"
+                      value={updatedFleet.depreciation_rate ?? fleet.depreciation_rate}
+                      onChange={(e) => setUpdatedFleet({ ...updatedFleet, depreciation_rate: Number(e.target.value) })}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    fleet.depreciation_rate
+                  )}</td>
+                  <td>{editingFleetId === fleet.fleet_id ? (
+                    <input
+                      type="number"
+                      value={updatedFleet.current_value ?? fleet.current_value}
+                      onChange={(e) => setUpdatedFleet({ ...updatedFleet, current_value: Number(e.target.value) })}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    fleet.current_value
+                  )}</td>
+                  <td>{editingFleetId === fleet.fleet_id ? (
+                    <input
+                      type="number"
+                      value={updatedFleet.maintenance_cost ?? fleet.maintenance_cost}
+                      onChange={(e) => setUpdatedFleet({ ...updatedFleet, maintenance_cost: Number(e.target.value) })}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    fleet.maintenance_cost
+                  )}</td>
+                  <td>{editingFleetId === fleet.fleet_id ? (
+                    <input
+                      type="text"
+                      value={updatedFleet.status ?? fleet.status}
+                      onChange={(e) => setUpdatedFleet({ ...updatedFleet, status: e.target.value })}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    fleet.status
+                  )}</td>
                   <td>{fleet.created_at}</td>
                   <td>{fleet.updated_at}</td>
                   <td className="flex gap-2">
-                    <button className="btn btn-sm btn-outline btn-info" onClick={() => handleUpdate(fleet.fleet_id)}>Update</button>
+                    {editingFleetId === fleet.fleet_id ? (
+                      <button className="btn btn-sm btn-outline btn-success" onClick={handleSave}>Save</button>
+                    ) : (
+                      <button className="btn btn-sm btn-outline btn-info" onClick={() => handleEdit(fleet)}>Update</button>
+                    )}
                     <button className="btn btn-sm btn-outline btn-warning" onClick={() => handleDelete(fleet.fleet_id)}>Delete</button>
-                    <button className="btn btn-sm btn-outline btn-primary" onClick={() => handleViewMore(fleet.fleet_id)}>View More</button>
                   </td>
                 </tr>
               ))
@@ -179,26 +239,6 @@ const FleetManagement: React.FC = () => {
             <tr><td colSpan={10}>{data ? `${data.length} records` : '0 records'}</td></tr>
           </tfoot>
         </table>
-
-        {selectedFleet && (
-          <div className="modal">
-            <div className="modal-box">
-              <h2 className="font-bold text-lg">Fleet Details</h2>
-              <p><strong>Fleet ID:</strong> {selectedFleet.fleet_id}</p>
-              <p><strong>Vehicle ID:</strong> {selectedFleet.vehicle_id}</p>
-              <p><strong>Acquisition Date:</strong> {selectedFleet.acquisition_date}</p>
-              <p><strong>Depreciation Rate:</strong> {selectedFleet.depreciation_rate}</p>
-              <p><strong>Current Value:</strong> {selectedFleet.current_value}</p>
-              <p><strong>Maintenance Cost:</strong> {selectedFleet.maintenance_cost}</p>
-              <p><strong>Status:</strong> {selectedFleet.status}</p>
-              <p><strong>Created At:</strong> {selectedFleet.created_at}</p>
-              <p><strong>Updated At:</strong> {selectedFleet.updated_at}</p>
-              <div className="modal-action">
-                <button className="btn btn-sm btn-outline btn-primary" onClick={() => setSelectedFleet(null)}>Close</button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );

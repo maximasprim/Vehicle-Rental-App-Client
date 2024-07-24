@@ -15,11 +15,11 @@ export interface TPayment {
 }
 
 const Payments: React.FC = () => {
-  const { data, isLoading } = useGetPaymentsQuery(undefined,{pollingInterval: 1000});
+  const { data, isLoading } = useGetPaymentsQuery(undefined, { pollingInterval: 1000 });
   const [createPayment] = useCreatePaymentMutation();
   const [updatePayment] = useUpdatePaymentMutation();
   const [deletePayment, { data: deleteMsg }] = useDeletePaymentMutation();
-console.log(data)
+
   const [newPayment, setNewPayment] = useState<Partial<TPayment>>({
     booking_id: 0,
     amount: 0,
@@ -29,10 +29,21 @@ console.log(data)
     transaction_id: '',
   });
 
+  const [editingPaymentId, setEditingPaymentId] = useState<number | null>(null);
+  const [updatedPayment, setUpdatedPayment] = useState<Partial<TPayment>>({});
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setNewPayment({
       ...newPayment,
+      [name]: value,
+    });
+  };
+
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setUpdatedPayment({
+      ...updatedPayment,
       [name]: value,
     });
   };
@@ -50,11 +61,17 @@ console.log(data)
     });
   };
 
-  const handleUpdate = (payment_id: number) => {
-    const updatePaymentData = {
-      payment_status: 'updated',
-    };
-    updatePayment({ payment_id, ...updatePaymentData });
+  const handleEdit = (payment: TPayment) => {
+    setEditingPaymentId(payment.payment_id);
+    setUpdatedPayment(payment);
+  };
+
+  const handleSave = async () => {
+    if (editingPaymentId !== null) {
+      await updatePayment({ payment_id: editingPaymentId, ...updatedPayment });
+      setEditingPaymentId(null);
+      toast.success('Payment updated successfully');
+    }
   };
 
   const handleDelete = async (payment_id: number) => {
@@ -74,7 +91,7 @@ console.log(data)
           },
         }}
       />
-      <div className="overflow-x-auto bg-gray-800 text-white  p-4 h-screen overflow-y-auto w-full">
+      <div className="overflow-x-auto bg-gray-800 text-white p-4 h-screen overflow-y-auto w-full">
         <h1 className="text-xl my-4">Payments</h1>
         <form onSubmit={handleCreate} className="mb-4">
           <div className="grid grid-cols-2 gap-4">
@@ -150,17 +167,81 @@ console.log(data)
             ) : (
               data && data.map((payment: TPayment, index: number) => (
                 <tr key={index}>
-                  <th>{payment.payment_id}</th>
-                  <td>{payment.booking_id}</td>
-                  <td>{payment.amount}</td>
-                  <td>{payment.payment_status}</td>
-                  <td>{payment.payment_date}</td>
-                  <td>{payment.payment_method}</td>
-                  <td>{payment.transaction_id}</td>
+                  <td>{payment.payment_id}</td>
+                  <td>{editingPaymentId === payment.payment_id ? (
+                    <input
+                      type="number"
+                      name="booking_id"
+                      value={updatedPayment.booking_id ?? payment.booking_id}
+                      onChange={handleEditChange}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    payment.booking_id
+                  )}</td>
+                  <td>{editingPaymentId === payment.payment_id ? (
+                    <input
+                      type="number"
+                      name="amount"
+                      value={updatedPayment.amount ?? payment.amount}
+                      onChange={handleEditChange}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    payment.amount
+                  )}</td>
+                  <td>{editingPaymentId === payment.payment_id ? (
+                    <input
+                      type="text"
+                      name="payment_status"
+                      value={updatedPayment.payment_status ?? payment.payment_status}
+                      onChange={handleEditChange}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    payment.payment_status
+                  )}</td>
+                  <td>{editingPaymentId === payment.payment_id ? (
+                    <input
+                      type="date"
+                      name="payment_date"
+                      value={updatedPayment.payment_date ?? payment.payment_date}
+                      onChange={handleEditChange}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    payment.payment_date
+                  )}</td>
+                  <td>{editingPaymentId === payment.payment_id ? (
+                    <input
+                      type="text"
+                      name="payment_method"
+                      value={updatedPayment.payment_method ?? payment.payment_method}
+                      onChange={handleEditChange}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    payment.payment_method
+                  )}</td>
+                  <td>{editingPaymentId === payment.payment_id ? (
+                    <input
+                      type="text"
+                      name="transaction_id"
+                      value={updatedPayment.transaction_id ?? payment.transaction_id}
+                      onChange={handleEditChange}
+                      className="input input-bordered w-full"
+                    />
+                  ) : (
+                    payment.transaction_id
+                  )}</td>
                   <td>{payment.created_at}</td>
                   <td>{payment.updated_at}</td>
                   <td className="flex gap-2">
-                    <button className="btn btn-sm btn-outline btn-info" onClick={() => handleUpdate(payment.payment_id)}>Update</button>
+                    {editingPaymentId === payment.payment_id ? (
+                      <button className="btn btn-sm btn-outline btn-success" onClick={handleSave}>Save</button>
+                    ) : (
+                      <button className="btn btn-sm btn-outline btn-info" onClick={() => handleEdit(payment)}>Edit</button>
+                    )}
                     <button className="btn btn-sm btn-outline btn-warning" onClick={() => handleDelete(payment.payment_id)}>Delete</button>
                   </td>
                 </tr>
